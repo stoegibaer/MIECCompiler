@@ -1,0 +1,152 @@
+﻿  Performing Custom Build Tools
+  Coco/R (Dec 01, 2018)
+  checking
+    Statements deletable
+  parser + scanner generated
+  0 errors detected
+  Parser.cpp
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.h(64,16): error C2143: syntax error: missing ';' before '*'
+  (compiling source file 'MiniIEC/Parser.cpp')
+  
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.h(64,2): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+  (compiling source file 'MiniIEC/Parser.cpp')
+  
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.h(64,20): error C2238: unexpected token(s) preceding ';'
+  (compiling source file 'MiniIEC/Parser.cpp')
+  
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.h(65,16): error C2143: syntax error: missing ';' before '*'
+  (compiling source file 'MiniIEC/Parser.cpp')
+  
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.h(65,2): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+  (compiling source file 'MiniIEC/Parser.cpp')
+  
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.h(65,20): error C2238: unexpected token(s) preceding ';'
+  (compiling source file 'MiniIEC/Parser.cpp')
+  
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(76,3): error C2065: 'gen': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(92,3): error C2065: 'tab': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(96,3): error C2065: 'tab': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(102,3): error C2065: 'Obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(102,8): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(102,14): error C2065: 'tab': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(103,3): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(103,14): error C2065: 'tab': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(104,7): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(104,24): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(104,35): error C2065: 'tab': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(110,4): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(110,10): error C2065: 'tab': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(111,4): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(111,15): error C2065: 'tab': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(112,8): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(112,25): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(112,36): error C2065: 'tab': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(120,28): error C2065: 'Obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(120,33): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(124,4): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(124,10): error C2065: 'tab': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(125,8): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(125,21): error C2664: 'void MIEC::Parser::Err(wchar_t *)': cannot convert argument 1 from 'const wchar_t [22]' to 'wchar_t *'
+      D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(125,25):
+      Conversion from string literal loses const qualifier (see /Zc:strictStrings)
+      D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.h(67,7):
+      see declaration of 'MIEC::Parser::Err'
+      D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(125,21):
+      while trying to match the argument list '(const wchar_t [22])'
+  
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(129,8): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(129,32): error C2664: 'void MIEC::Parser::Err(wchar_t *)': cannot convert argument 1 from 'const wchar_t [22]' to 'wchar_t *'
+      D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(129,36):
+      Conversion from string literal loses const qualifier (see /Zc:strictStrings)
+      D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.h(67,7):
+      see declaration of 'MIEC::Parser::Err'
+      D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(129,32):
+      while trying to match the argument list '(const wchar_t [22])'
+  
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(130,8): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(131,9): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(131,26): error C2065: 'gen': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(131,42): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(132,10): error C2065: 'gen': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(132,25): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(140,25): error C2664: 'void MIEC::Parser::Err(wchar_t *)': cannot convert argument 1 from 'const wchar_t [22]' to 'wchar_t *'
+      D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(140,29):
+      Conversion from string literal loses const qualifier (see /Zc:strictStrings)
+      D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.h(67,7):
+      see declaration of 'MIEC::Parser::Err'
+      D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(140,25):
+      while trying to match the argument list '(const wchar_t [22])'
+  
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(141,4): error C2065: 'gen': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(145,16): error C2065: 'gen': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(149,4): error C2065: 'gen': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(153,4): error C2065: 'gen': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(153,30): error C2065: 'gen': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(158,5): error C2065: 'gen': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(158,31): error C2065: 'gen': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(159,5): error C2065: 'gen': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(159,21): error C2065: 'gen': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(163,4): error C2065: 'gen': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(163,20): error C2065: 'gen': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(175,5): error C2664: 'void MIEC::Parser::Err(wchar_t *)': cannot convert argument 1 from 'const wchar_t [22]' to 'wchar_t *'
+      D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(175,9):
+      Conversion from string literal loses const qualifier (see /Zc:strictStrings)
+      D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.h(67,7):
+      see declaration of 'MIEC::Parser::Err'
+      D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(175,5):
+      while trying to match the argument list '(const wchar_t [22])'
+  
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(176,4): error C2065: 'gen': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(186,4): error C2664: 'void MIEC::Parser::Err(wchar_t *)': cannot convert argument 1 from 'const wchar_t [22]' to 'wchar_t *'
+      D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(186,8):
+      Conversion from string literal loses const qualifier (see /Zc:strictStrings)
+      D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.h(67,7):
+      see declaration of 'MIEC::Parser::Err'
+      D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(186,4):
+      while trying to match the argument list '(const wchar_t [22])'
+  
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(187,3): error C2065: 'gen': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(197,5): error C2664: 'void MIEC::Parser::Err(wchar_t *)': cannot convert argument 1 from 'const wchar_t [22]' to 'wchar_t *'
+      D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(197,9):
+      Conversion from string literal loses const qualifier (see /Zc:strictStrings)
+      D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.h(67,7):
+      see declaration of 'MIEC::Parser::Err'
+      D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(197,5):
+      while trying to match the argument list '(const wchar_t [22])'
+  
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(198,4): error C2065: 'gen': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(214,10): error C2065: 'Obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(214,15): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(218,4): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(218,10): error C2065: 'tab': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(219,8): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(220,5): error C2664: 'void MIEC::Parser::Err(wchar_t *)': cannot convert argument 1 from 'const wchar_t [22]' to 'wchar_t *'
+      D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(220,9):
+      Conversion from string literal loses const qualifier (see /Zc:strictStrings)
+      D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.h(67,7):
+      see declaration of 'MIEC::Parser::Err'
+      D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(220,5):
+      while trying to match the argument list '(const wchar_t [22])'
+  
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(223,12): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(224,9): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(224,26): error C2065: 'gen': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(224,43): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(225,10): error C2065: 'gen': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(225,26): error C2065: 'obj': undeclared identifier
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp(230,4): error C2065: 'gen': undeclared identifier
+  Scanner.cpp
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Scanner.cpp(23,20): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Scanner.cpp(46,30): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Scanner.cpp(63,14): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Scanner.cpp(88,32): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Scanner.cpp(89,31): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Scanner.cpp(116,27): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Scanner.cpp(121,14): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Scanner.cpp(122,13): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Scanner.cpp(129,24): warning C4244: 'return': conversion from '__int64' to 'int', possible loss of data
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Scanner.cpp(136,24): warning C4244: 'return': conversion from '__int64' to 'int', possible loss of data
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Scanner.cpp(169,27): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Scanner.cpp(319,17): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Scanner.cpp(343,11): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  Generating Code...

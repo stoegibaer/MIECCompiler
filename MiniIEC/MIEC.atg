@@ -1,0 +1,130 @@
+/* MIEC.atg - Attributierte Grammatik für MiniIEC Compiler
+ * Compiler Engineering, FH-OÖ Hagenberg
+ * Phase 1: Scanner und Parser für Syntaxanalyse
+ */
+
+COMPILER MIEC
+
+CHARACTERS
+  letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".
+  digit  = "0123456789".
+  cr     = '\r'.
+  lf     = '\n'.
+  tab    = '\t'.
+
+TOKENS
+  ident  = letter {letter | digit | '_'}.
+  number = digit {digit}.
+
+COMMENTS FROM "(*" TO "*)"
+
+IGNORE cr + lf + tab
+
+
+PRODUCTIONS
+
+/*--------------------------------------------------------------------------*/
+MIEC
+= "PROGRAM" ident
+  [ VarDecl ]
+  "BEGIN"
+  Statements
+  "END"
+.
+
+/*--------------------------------------------------------------------------*/
+VarDecl
+= "BEGIN_VAR"
+  VarDeclList
+  "END_VAR"
+.
+
+/*--------------------------------------------------------------------------*/
+VarDeclList
+= ident ':' "Integer" ';'
+  { ident ':' "Integer" ';' }
+.
+
+/*--------------------------------------------------------------------------*/
+Statements
+= { Stat }
+.
+
+/*--------------------------------------------------------------------------*/
+Stat
+= Assignment
+| PrintStatement
+| WhileStatement
+| IfStatement
+.
+
+/*--------------------------------------------------------------------------*/
+Assignment
+= ident ":=" Expr ';'
+.
+
+/*--------------------------------------------------------------------------*/
+PrintStatement
+= "print" '(' Expr ')' ';'
+.
+
+/*--------------------------------------------------------------------------*/
+WhileStatement
+= "WHILE" Condition "DO"
+  Statements
+  "END"
+.
+
+/*--------------------------------------------------------------------------*/
+IfStatement
+= "IF" Condition "THEN"
+  Statements
+  [ "ELSE" Statements ]
+  "END"
+.
+
+/*--------------------------------------------------------------------------*/
+Expr
+= Term { AddOp Term }
+.
+
+/*--------------------------------------------------------------------------*/
+Term
+= Factor { MulOp Factor }
+.
+
+/*--------------------------------------------------------------------------*/
+Factor
+= ident
+| number
+| '(' Expr ')'
+.
+
+/*--------------------------------------------------------------------------*/
+Condition
+= Expr Relop Expr
+.
+
+/*--------------------------------------------------------------------------*/
+Relop
+= '='
+| "<="
+| ">="
+| "!="
+| '<'
+| '>'
+.
+
+/*--------------------------------------------------------------------------*/
+AddOp
+= '+'
+| '-'
+.
+
+/*--------------------------------------------------------------------------*/
+MulOp
+= '*'
+| '/'
+.
+
+END MIEC.

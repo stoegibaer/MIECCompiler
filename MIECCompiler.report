@@ -1,0 +1,4 @@
+Thu Oct 30 09:06:49 2025 => test.miec: OK
+Thu Oct 30 09:07:57 2025 => test.miec: OK
+Thu Oct 30 09:09:18 2025 => xfail_error.miec: FAILED: 1 error(s) detected
+Thu Oct 30 09:37:48 2025 => xfail_error.miec: FAILED: 1 error(s) detected

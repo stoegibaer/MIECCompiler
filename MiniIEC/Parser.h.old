@@ -1,0 +1,112 @@
+
+
+#if !defined(MIEC_COCO_PARSER_H__)
+#define MIEC_COCO_PARSER_H__
+
+
+
+#include "Scanner.h"
+
+namespace MIEC {
+
+
+class Errors {
+public:
+	int count;			// number of errors detected
+
+	Errors();
+	void SynErr(int line, int col, int n);
+	void Error(int line, int col, const wchar_t *s);
+	void Warning(int line, int col, const wchar_t *s);
+	void Warning(const wchar_t *s);
+	void Exception(const wchar_t *s);
+
+}; // Errors
+
+class Parser {
+private:
+	enum {
+		_EOF=0,
+		_ident=1,
+		_number=2
+	};
+	int maxT;
+
+	Token *dummyToken;
+	int errDist;
+	int minErrDist;
+
+	void SynErr(int n);
+	void Get();
+	void Expect(int n);
+	bool StartOf(int s);
+	void ExpectWeak(int n, int follow);
+	bool WeakSeparator(int n, int syFol, int repFol);
+
+public:
+	Scanner *scanner;
+	Errors  *errors;
+
+	Token *t;			// last recognized token
+	Token *la;			// lookahead token
+
+int // types
+	  undef, integer;
+
+	int // object kinds
+	  var;
+
+	int // opcodes
+	  ADD, SUB, MUL, DIV, EQU, LSS, GTR, LEQ, GEQ, NEQ,
+	  LOAD, LOADG, STO, STOG, CONST,
+	  JMP, FJMP, ENTER, LEAVE, WRITE;
+	
+	SymbolTable   *tab;
+	CodeGenerator *gen;
+
+	void Err(wchar_t* msg) {
+		errors->Error(la->line, la->col, msg);
+	}
+
+	void InitDeclarations() {
+		undef = 0; integer = 1;  // types
+		var = 0;                  // object kinds
+
+		// opcodes
+		ADD  =  0; SUB  =  1; MUL  =  2; DIV  =  3;
+		EQU  =  4; LSS  =  5; GTR  =  6; LEQ  =  7; GEQ  =  8; NEQ  =  9;
+		LOAD = 10; LOADG = 11; STO = 12; STOG = 13; CONST = 14;
+		JMP  = 15; FJMP = 16; ENTER = 17; LEAVE = 18; WRITE = 19;
+	}
+
+
+/*--------------------------------------------------------------------------*/
+
+
+	Parser(Scanner *scanner);
+	~Parser();
+	void SemErr(const wchar_t* msg);
+
+	void MIEC();
+	void Ident(wchar_t* &name);
+	void VarDecl();
+	void Statements();
+	void VarDeclList();
+	void Stat();
+	void Expr(int &type);
+	void Condition();
+	void Term(int &type);
+	void AddOp(int &op);
+	void Factor(int &type);
+	void MulOp(int &op);
+	void Relop(int &op);
+
+	void Parse();
+
+}; // end Parser
+
+} // namespace
+
+
+#endif
+
