@@ -8,11 +8,11 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include <wchar.h>
 #include <time.h>
 #include <string.h>
 #include "Scanner.h"
 #include "Parser.h"
+#include <iostream>
 
 using namespace MIEC;
 
@@ -21,21 +21,21 @@ using namespace MIEC;
  * @param filename Der Dateipfad
  * @return Zeiger auf die Erweiterung oder NULL
  */
-const wchar_t* GetFileExtension(const wchar_t* filename) {
-	const wchar_t* ext = wcsrchr(filename, L'.');
+const char* GetFileExtension(const char* filename) {
+	const char* ext = strrchr(filename, '.');
 	return ext ? ext : NULL;
 }
 
 /**
  * Überprüft, ob die Dateierweiterung korrekt ist
  * @param filename Der Dateipfad
- * @param expectedExt Die erwartete Erweiterung (z.B. L".miec")
+ * @param expectedExt Die erwartete Erweiterung (z.B. ".miec")
  * @return true wenn Erweiterung korrekt ist
  */
-bool HasCorrectExtension(const wchar_t* filename, const wchar_t* expectedExt) {
-	const wchar_t* ext = GetFileExtension(filename);
+bool HasCorrectExtension(const char* filename, const char* expectedExt) {
+	const char* ext = GetFileExtension(filename);
 	if (!ext) return false;
-	return wcscmp(ext, expectedExt) == 0;
+	return strcmp(ext, expectedExt) == 0;
 }
 
 /**
@@ -43,10 +43,10 @@ bool HasCorrectExtension(const wchar_t* filename, const wchar_t* expectedExt) {
  * @param buffer Der Puffer für das Ergebnis
  * @param bufsize Die Größe des Puffers
  */
-void GetCurrentTimeString(wchar_t* buffer, size_t bufsize) {
+void GetCurrentTimeString(char* buffer, size_t bufsize) {
 	time_t now = time(NULL);
 	struct tm* timeinfo = localtime(&now);
-	wcsftime(buffer, bufsize, L"%a %b %d %H:%M:%S %Y", timeinfo);
+	strftime(buffer, bufsize, "%a %b %d %H:%M:%S %Y", timeinfo);
 }
 
 /**
@@ -54,23 +54,23 @@ void GetCurrentTimeString(wchar_t* buffer, size_t bufsize) {
  * @param inputFile Der Eingabedateiname
  * @param errorCount Die Anzahl der Fehler
  */
-void WriteReportEntry(const wchar_t* inputFile, int errorCount) {
-	FILE* reportFile = _wfopen(L"MIECCompiler.report", L"a");
+void WriteReportEntry(const char* inputFile, int errorCount) {
+	FILE* reportFile = fopen("MIECCompiler.report", "a");
 	if (!reportFile) {
-		wprintf(L"Fehler: Kann MIECCompiler.report nicht öffnen\n");
+		printf("Fehler: Kann MIECCompiler.report nicht öffnen\n");
 		return;
 	}
 
-	wchar_t timeStr[100];
+	char timeStr[100];
 	GetCurrentTimeString(timeStr, 100);
 
 	if (errorCount == 0) {
-		fwprintf(reportFile, L"%ls => %ls: OK\n", timeStr, inputFile);
-		wprintf(L"%ls => %ls: OK\n", timeStr, inputFile);
+		fprintf(reportFile, "%s => %s: OK\n", timeStr, inputFile);
+		std::cout << timeStr << " => " << inputFile << ": OK" << std::endl;
 	}
 	else {
-		fwprintf(reportFile, L"%ls => %ls: FAILED: %d error(s) detected\n", timeStr, inputFile, errorCount);
-		fwprintf(stderr, L"%ls => %ls: FAILED: %d error(s) detected\n", timeStr, inputFile, errorCount);
+		fprintf(reportFile, "%s => %s: FAILED: %d error(s) detected\n", timeStr, inputFile, errorCount);
+		std::cerr << timeStr << " => " << inputFile << ": FAILED: " << errorCount << " error(s) detected" << std::endl;
 	}
 
 	fclose(reportFile);
@@ -79,41 +79,41 @@ void WriteReportEntry(const wchar_t* inputFile, int errorCount) {
 /**
  * Hauptprogramm
  */
-int wmain(int argc, wchar_t* argv[]) {
-	wchar_t* inputFile = NULL;
-	wchar_t* outputFile = NULL;
+int main(int argc, char* argv[]) {
+	char* inputFile = NULL;
+	char* outputFile = NULL;
 
 	// Kommandozeilenargumente parsen
 	for (int i = 1; i < argc; i++) {
-		if (wcscmp(argv[i], L"-in") == 0 && i + 1 < argc) {
+		if (strcmp(argv[i], "-in") == 0 && i + 1 < argc) {
 			inputFile = argv[++i];
 		}
-		else if (wcscmp(argv[i], L"-out") == 0 && i + 1 < argc) {
+		else if (strcmp(argv[i], "-out") == 0 && i + 1 < argc) {
 			outputFile = argv[++i];
 		}
 	}
 
 	// Überprüfe erforderliche Argumente
 	if (!inputFile || !outputFile) {
-		wprintf(L"Verwendung: MIECCompiler.exe -in <file.miec> -out <file.iex>\n");
+		printf("Verwendung: MIECCompiler.exe -in <file.miec> -out <file.iex>\n");
 		return 1;
 	}
 
 	// Überprüfe Dateierweiterungen
-	if (!HasCorrectExtension(inputFile, L".miec")) {
-		wprintf(L"Fehler: Eingabedatei muss die Erweiterung .miec haben\n");
+	if (!HasCorrectExtension(inputFile, ".miec")) {
+		printf("Fehler: Eingabedatei muss die Erweiterung .miec haben\n");
 		return 1;
 	}
 
-	if (!HasCorrectExtension(outputFile, L".iex")) {
-		wprintf(L"Fehler: Ausgabedatei muss die Erweiterung .iex haben\n");
+	if (!HasCorrectExtension(outputFile, ".iex")) {
+		printf("Fehler: Ausgabedatei muss die Erweiterung .iex haben\n");
 		return 1;
 	}
 
 	// Versuche die Eingabedatei zu öffnen
-	FILE* inFile = _wfopen(inputFile, L"rb");
+	FILE* inFile = fopen(inputFile, "rb");
 	if (!inFile) {
-		wprintf(L"Fehler: Kann Eingabedatei nicht öffnen: %ls\n", inputFile);
+		printf("Fehler: Kann Eingabedatei nicht öffnen: %s\n", inputFile);
 		return 1;
 	}
 
@@ -135,15 +135,15 @@ int wmain(int argc, wchar_t* argv[]) {
 		WriteReportEntry(inputFile, errorCount);
 
 		// Ausgabedatei erstellen (auch wenn Fehler aufgetreten sind)
-		FILE* outFile = _wfopen(outputFile, L"w");
+		FILE* outFile = fopen(outputFile, "w");
 		if (outFile) {
 			if (errorCount == 0) {
-				fwprintf(outFile, L"; MiniIEC Intermediate Code\n; Generated from: %ls\n", inputFile);
+				fprintf(outFile, "; MiniIEC Intermediate Code\n; Generated from: %s\n", inputFile);
 			}
 			fclose(outFile);
 		}
 		else {
-			wprintf(L"Warnung: Kann Ausgabedatei nicht erstellen: %ls\n", outputFile);
+			printf("Warnung: Kann Ausgabedatei nicht erstellen: %s\n", outputFile);
 		}
 
 		// Rückgabewert basierend auf Fehleranzahl
@@ -157,15 +157,15 @@ int wmain(int argc, wchar_t* argv[]) {
 		return returnCode;
 
 	}
-	catch (const wchar_t* e) {
-		wprintf(L"Fehler: %ls\n", e);
+	catch (const char* e) {
+		printf("Fehler: %s\n", e);
 		if (inFile) fclose(inFile);
 		if (parser) delete parser;
 		if (scanner) delete scanner;
 		return 1;
 	}
 	catch (...) {
-		wprintf(L"Unbekannter Fehler während der Kompilation\n");
+		printf("Unbekannter Fehler während der Kompilation\n");
 		if (inFile) fclose(inFile);
 		if (parser) delete parser;
 		if (scanner) delete scanner;

@@ -65,20 +65,18 @@ bool Parser::WeakSeparator(int n, int syFol, int repFol) {
 void Parser::MIEC() {
 		Expect(3 /* "PROGRAM" */);
 		Expect(_ident);
-		if (la->kind == 6 /* "BEGIN_VAR" */) {
+		if (la->kind == 6 /* "VAR_BEGIN" */) {
 			VarDecl();
 		}
 		Expect(4 /* "BEGIN" */);
 		Statements();
 		Expect(5 /* "END" */);
-		mSymTab.computeOffsets(0);
-		
 }
 
 void Parser::VarDecl() {
-		Expect(6 /* "BEGIN_VAR" */);
+		Expect(6 /* "VAR_BEGIN" */);
 		VarDeclList();
-		Expect(7 /* "END_VAR" */);
+		Expect(7 /* "VAR_END" */);
 }
 
 void Parser::Statements() {
@@ -88,35 +86,15 @@ void Parser::Statements() {
 }
 
 void Parser::VarDeclList() {
-		std::wstring varName; 
 		Expect(_ident);
-		varName = TokenToWString(t); 
 		Expect(8 /* ":" */);
 		Expect(9 /* "Integer" */);
 		Expect(10 /* ";" */);
-		try {
-		 mSymTab.addVariable(varName, mSymTab.getIntegerType());
-		} catch (const std::runtime_error& e) {
-		 // Double declaration error
-		 std::string errStr(e.what());
-		 std::wstring wErr(errStr.begin(), errStr.end());
-		 SemanticError(wErr, t->line, t->col);
-		}
-		
 		while (la->kind == _ident) {
 			Get();
-			varName = TokenToWString(t); 
 			Expect(8 /* ":" */);
 			Expect(9 /* "Integer" */);
 			Expect(10 /* ";" */);
-			try {
-			 mSymTab.addVariable(varName, mSymTab.getIntegerType());
-			} catch (const std::runtime_error& e) {
-			 std::string errStr(e.what());
-			 std::wstring wErr(errStr.begin(), errStr.end());
-			 SemanticError(wErr, t->line, t->col);
-			}
-			
 		}
 }
 
@@ -133,48 +111,31 @@ void Parser::Stat() {
 }
 
 void Parser::Assignment() {
-		std::wstring varName; 
-		TypePtr exprType; 
 		Expect(_ident);
-		varName = TokenToWString(t);
-		int line = t->line, col = t->col; 
 		Expect(11 /* ":=" */);
-		Expr(exprType);
+		Expr();
 		Expect(10 /* ";" */);
-		SymbolPtr sym = mSymTab.lookup(varName);
-		if (!sym) {
-		 SemanticError(L"Undefinierte Variable: " + varName, line, col);
-		} else {
-		 // Check type compatibility
-		 if (!AreTypesCompatible(sym->type, exprType)) {
-		   SemanticError(L"Typfehler bei Zuweisung: " + varName, line, col);
-		 }
-		}
-		
 }
 
 void Parser::PrintStatement() {
-		TypePtr exprType; 
 		Expect(12 /* "print" */);
 		Expect(13 /* "(" */);
-		Expr(exprType);
+		Expr();
 		Expect(14 /* ")" */);
 		Expect(10 /* ";" */);
 }
 
 void Parser::WhileStatement() {
-		TypePtr condType; 
 		Expect(15 /* "WHILE" */);
-		Condition(condType);
+		Condition();
 		Expect(16 /* "DO" */);
 		Statements();
 		Expect(5 /* "END" */);
 }
 
 void Parser::IfStatement() {
-		TypePtr condType; 
 		Expect(17 /* "IF" */);
-		Condition(condType);
+		Condition();
 		Expect(18 /* "THEN" */);
 		Statements();
 		if (la->kind == 19 /* "ELSE" */) {
@@ -184,46 +145,25 @@ void Parser::IfStatement() {
 		Expect(5 /* "END" */);
 }
 
-void Parser::Expr(TypePtr& type) {
-		TypePtr termType; 
-		Term(type);
+void Parser::Expr() {
+		Term();
 		while (la->kind == 26 /* "+" */ || la->kind == 27 /* "-" */) {
 			AddOp();
-			Term(termType);
-			if (!AreTypesCompatible(type, termType)) {
-			 SemanticError(L"Typfehler in arithmetischem Ausdruck", t->line, t->col);
-			}
-			// Result type is Integer
-			type = mSymTab.getIntegerType();
-			
+			Term();
 		}
 }
 
-void Parser::Condition(TypePtr& type) {
-		TypePtr leftType, rightType; 
-		Expr(leftType);
+void Parser::Condition() {
+		Expr();
 		Relop();
-		Expr(rightType);
-		if (!AreTypesCompatible(leftType, rightType)) {
-		 SemanticError(L"Typfehler in Vergleich", t->line, t->col);
-		}
-		// Condition evaluates to boolean (we represent as Integer: 0 or 1)
-		type = mSymTab.getIntegerType();
-		
+		Expr();
 }
 
-void Parser::Term(TypePtr& type) {
-		TypePtr factorType; 
-		Factor(type);
+void Parser::Term() {
+		Factor();
 		while (la->kind == 28 /* "*" */ || la->kind == 29 /* "/" */) {
 			MulOp();
-			Factor(factorType);
-			if (!AreTypesCompatible(type, factorType)) {
-			 SemanticError(L"Typfehler in arithmetischem Ausdruck", t->line, t->col);
-			}
-			// Result type is Integer
-			type = mSymTab.getIntegerType();
-			
+			Factor();
 		}
 }
 
@@ -235,32 +175,14 @@ void Parser::AddOp() {
 		} else SynErr(32);
 }
 
-void Parser::Factor(TypePtr& type) {
-		std::wstring name; 
-		long long numVal; 
-		SymbolPtr sym; 
+void Parser::Factor() {
 		if (la->kind == _ident) {
 			Get();
-			name = TokenToWString(t);
-			int line = t->line, col = t->col; 
-			sym = mSymTab.lookup(name);
-			if (!sym) {
-			 SemanticError(L"Undefinierte Variable: " + name, line, col);
-			 type = mSymTab.getIntegerType(); // default to prevent cascading errors
-			} else {
-			 type = sym->type;
-			}
-			
 		} else if (la->kind == _number) {
 			Get();
-			numVal = TokenToInt(t);
-			std::wstring literal = TokenToWString(t); 
-			sym = mSymTab.addConstantLiteral(literal, numVal, mSymTab.getIntegerType());
-			type = sym->type;
-			
 		} else if (la->kind == 13 /* "(" */) {
 			Get();
-			Expr(type);
+			Expr();
 			Expect(14 /* ")" */);
 		} else SynErr(33);
 }
@@ -448,8 +370,8 @@ void Errors::SynErr(int line, int col, int n) {
 			case 3: s = coco_string_create(L"\"PROGRAM\" expected"); break;
 			case 4: s = coco_string_create(L"\"BEGIN\" expected"); break;
 			case 5: s = coco_string_create(L"\"END\" expected"); break;
-			case 6: s = coco_string_create(L"\"BEGIN_VAR\" expected"); break;
-			case 7: s = coco_string_create(L"\"END_VAR\" expected"); break;
+			case 6: s = coco_string_create(L"\"VAR_BEGIN\" expected"); break;
+			case 7: s = coco_string_create(L"\"VAR_END\" expected"); break;
 			case 8: s = coco_string_create(L"\":\" expected"); break;
 			case 9: s = coco_string_create(L"\"Integer\" expected"); break;
 			case 10: s = coco_string_create(L"\";\" expected"); break;

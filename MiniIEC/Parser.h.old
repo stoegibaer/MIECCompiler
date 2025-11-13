@@ -3,10 +3,6 @@
 #if !defined(MIEC_COCO_PARSER_H__)
 #define MIEC_COCO_PARSER_H__
 
-#include "SymbolTable.h"
-#include <string>
-#include <sstream>
-#include <stdexcept>
 
 
 #include "Scanner.h"
@@ -54,42 +50,6 @@ public:
 	Token *t;			// last recognized token
 	Token *la;			// lookahead token
 
-SymbolTable mSymTab;
-
-// Helper method: convert Token->val (wchar_t*) to std::wstring
-std::wstring TokenToWString(Token* tok) {
-    if (!tok || !tok->val) return L"";
-    return std::wstring(tok->val);
-}
-
-// Helper method: convert number token to long long
-long long TokenToInt(Token* tok) {
-    if (!tok || !tok->val) return 0;
-    std::wstring ws(tok->val);
-    try {
-        return std::stoll(ws);
-    } catch (...) {
-        return 0;
-    }
-}
-
-// Helper method: check if two types are assignment compatible
-bool AreTypesCompatible(TypePtr t1, TypePtr t2) {
-    if (!t1 || !t2) return false;
-    // In MIEC we only have Integer type, so they must be the same
-    return t1->name == t2->name;
-}
-
-// Helper method: semantic error reporting
-void SemanticError(const std::wstring& msg, int line, int col) {
-    std::wstring fullMsg = L"Semantic error: " + msg;
-    // Convert to char* for Error function
-    std::string narrow(fullMsg.begin(), fullMsg.end());
-    wchar_t* wmsg = coco_string_create(fullMsg.c_str());
-    errors->Error(line, col, wmsg);
-    coco_string_delete(wmsg);
-}
-
 
 
 	Parser(Scanner *scanner);
@@ -105,11 +65,11 @@ void SemanticError(const std::wstring& msg, int line, int col) {
 	void PrintStatement();
 	void WhileStatement();
 	void IfStatement();
-	void Expr(TypePtr& type);
-	void Condition(TypePtr& type);
-	void Term(TypePtr& type);
+	void Expr();
+	void Condition();
+	void Term();
 	void AddOp();
-	void Factor(TypePtr& type);
+	void Factor();
 	void MulOp();
 	void Relop();
 
