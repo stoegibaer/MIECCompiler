@@ -22,6 +22,7 @@
     <ClCompile Include="MiniIEC\main.cpp" />
     <ClCompile Include="MiniIEC\Parser.cpp" />
     <ClCompile Include="MiniIEC\Scanner.cpp" />
+    <ClCompile Include="Symbol.cpp" />
     <ClCompile Include="SymbolTable.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -42,7 +43,6 @@
     <ClInclude Include="MiniIEC\Scanner.h" />
     <ClInclude Include="Symbol.h" />
     <ClInclude Include="SymbolTable.h" />
-    <ClInclude Include="Type.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

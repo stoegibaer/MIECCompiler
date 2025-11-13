@@ -1,5 +1,5 @@
-#ifndef SYMBOL_H
-#define SYMBOL_H
+#ifndef TYPE_H
+#define TYPE_H
 
 
 #include <string>
