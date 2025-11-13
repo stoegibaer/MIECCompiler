@@ -72,3 +72,9 @@ $RECYCLE.BIN/
 *.report
 *.pdb
 *.idb
+
+*.obj
+*.json
+*.ilk
+*.log
+*.suo
