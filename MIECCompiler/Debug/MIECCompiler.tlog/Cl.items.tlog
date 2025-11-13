@@ -1,4 +1,4 @@
-D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\main.cpp;D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MIECCompiler\Debug\main.obj
-D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Parser.cpp;D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MIECCompiler\Debug\Parser.obj
-D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\Scanner.cpp;D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MIECCompiler\Debug\Scanner.obj
-D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\SymbolTable.cpp;D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MIECCompiler\Debug\SymbolTable.obj
+C:\Users\Chip\Documents\fh-git\COM_ILV\MiniIEC\main.cpp;C:\Users\Chip\Documents\fh-git\COM_ILV\MIECCompiler\Debug\main.obj
+C:\Users\Chip\Documents\fh-git\COM_ILV\MiniIEC\Parser.cpp;C:\Users\Chip\Documents\fh-git\COM_ILV\MIECCompiler\Debug\Parser.obj
+C:\Users\Chip\Documents\fh-git\COM_ILV\MiniIEC\Scanner.cpp;C:\Users\Chip\Documents\fh-git\COM_ILV\MIECCompiler\Debug\Scanner.obj
+C:\Users\Chip\Documents\fh-git\COM_ILV\SymbolTable.cpp;C:\Users\Chip\Documents\fh-git\COM_ILV\MIECCompiler\Debug\SymbolTable.obj

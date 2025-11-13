@@ -1,0 +1,9 @@
+PROGRAM SYMBOL1
+BEGIN_VAR
+    x: Integer;
+    y: Integer;
+    z: Integer;
+END_VAR
+BEGIN
+    x := 4711 + 3;
+END

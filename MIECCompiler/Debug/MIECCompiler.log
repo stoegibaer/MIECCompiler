@@ -1,2 +1,12 @@
-﻿  main.cpp
-  MIECCompiler.vcxproj -> D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\Debug\MIECCompiler.exe
+﻿  Performing Custom Build Tools
+  Coco/R (Dec 01, 2018)
+  checking
+    Statements deletable
+  parser + scanner generated
+  0 errors detected
+  main.cpp
+  Parser.cpp
+  Scanner.cpp
+  SymbolTable.cpp
+  Code wird generiert...
+  MIECCompiler.vcxproj -> C:\Users\Chip\Documents\fh-git\COM_ILV\Debug\MIECCompiler.exe

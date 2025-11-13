@@ -443,8 +443,8 @@ void Scanner::Init() {
 	keywords.set(L"PROGRAM", 3);
 	keywords.set(L"BEGIN", 4);
 	keywords.set(L"END", 5);
-	keywords.set(L"VAR_BEGIN", 6);
-	keywords.set(L"VAR_END", 7);
+	keywords.set(L"BEGIN_VAR", 6);
+	keywords.set(L"END_VAR", 7);
 	keywords.set(L"Integer", 9);
 	keywords.set(L"print", 12);
 	keywords.set(L"WHILE", 15);

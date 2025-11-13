@@ -1,2 +1,2 @@
-^D:\DOKUMENTE\FH\MASTER\3.SEMESTER\COMP3\ÜBUNG\MIECCOMPILER\MIECCOMPILER\MINIIEC\MIEC.ATG
-.\Coco\Coco.exe D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\MIEC.atg -o D:\Dokumente\FH\Master\3.Semester\COMP3\Übung\MIECCompiler\MIECCompiler\MiniIEC\ -namespace MIEC -frames .\Coco
+^C:\USERS\CHIP\DOCUMENTS\FH-GIT\COM_ILV\MINIIEC\MIEC.ATG
+.\Coco\Coco.exe C:\Users\Chip\Documents\fh-git\COM_ILV\MiniIEC\MIEC.atg -o C:\Users\Chip\Documents\fh-git\COM_ILV\MiniIEC\ -namespace MIEC -frames .\Coco

@@ -65,7 +65,7 @@ bool Parser::WeakSeparator(int n, int syFol, int repFol) {
 void Parser::MIEC() {
 		Expect(3 /* "PROGRAM" */);
 		Expect(_ident);
-		if (la->kind == 6 /* "VAR_BEGIN" */) {
+		if (la->kind == 6 /* "BEGIN_VAR" */) {
 			VarDecl();
 		}
 		Expect(4 /* "BEGIN" */);
@@ -74,9 +74,9 @@ void Parser::MIEC() {
 }
 
 void Parser::VarDecl() {
-		Expect(6 /* "VAR_BEGIN" */);
+		Expect(6 /* "BEGIN_VAR" */);
 		VarDeclList();
-		Expect(7 /* "VAR_END" */);
+		Expect(7 /* "END_VAR" */);
 }
 
 void Parser::Statements() {
@@ -370,8 +370,8 @@ void Errors::SynErr(int line, int col, int n) {
 			case 3: s = coco_string_create(L"\"PROGRAM\" expected"); break;
 			case 4: s = coco_string_create(L"\"BEGIN\" expected"); break;
 			case 5: s = coco_string_create(L"\"END\" expected"); break;
-			case 6: s = coco_string_create(L"\"VAR_BEGIN\" expected"); break;
-			case 7: s = coco_string_create(L"\"VAR_END\" expected"); break;
+			case 6: s = coco_string_create(L"\"BEGIN_VAR\" expected"); break;
+			case 7: s = coco_string_create(L"\"END_VAR\" expected"); break;
 			case 8: s = coco_string_create(L"\":\" expected"); break;
 			case 9: s = coco_string_create(L"\"Integer\" expected"); break;
 			case 10: s = coco_string_create(L"\";\" expected"); break;
