@@ -1,6 +1,6 @@
 /**
  * main.cpp - MIEC Compiler
- * Compiler Engineering, FH-OÖ Hagenberg
+ * Compiler Engineering, FH-Oï¿½ Hagenberg
  * Phase 1: Scanner und Parser
  *
  * Verwendung:
@@ -27,7 +27,7 @@ const char* GetFileExtension(const char* filename) {
 }
 
 /**
- * Überprüft, ob die Dateierweiterung korrekt ist
+ * ï¿½berprï¿½ft, ob die Dateierweiterung korrekt ist
  * @param filename Der Dateipfad
  * @param expectedExt Die erwartete Erweiterung (z.B. ".miec")
  * @return true wenn Erweiterung korrekt ist
@@ -40,8 +40,8 @@ bool HasCorrectExtension(const char* filename, const char* expectedExt) {
 
 /**
  * Formatiert die aktuelle Zeit als String
- * @param buffer Der Puffer für das Ergebnis
- * @param bufsize Die Größe des Puffers
+ * @param buffer Der Puffer fï¿½r das Ergebnis
+ * @param bufsize Die Grï¿½ï¿½e des Puffers
  */
 void GetCurrentTimeString(char* buffer, size_t bufsize) {
 	time_t now = time(NULL);
@@ -57,7 +57,7 @@ void GetCurrentTimeString(char* buffer, size_t bufsize) {
 void WriteReportEntry(const char* inputFile, int errorCount) {
 	FILE* reportFile = fopen("MIECCompiler.report", "a");
 	if (!reportFile) {
-		printf("Fehler: Kann MIECCompiler.report nicht öffnen\n");
+		printf("Fehler: Kann MIECCompiler.report nicht ï¿½ffnen\n");
 		return;
 	}
 
@@ -93,13 +93,13 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
-	// Überprüfe erforderliche Argumente
+	// ï¿½berprï¿½fe erforderliche Argumente
 	if (!inputFile || !outputFile) {
 		printf("Verwendung: MIECCompiler.exe -in <file.miec> -out <file.iex>\n");
 		return 1;
 	}
 
-	// Überprüfe Dateierweiterungen
+	// ï¿½berprï¿½fe Dateierweiterungen
 	if (!HasCorrectExtension(inputFile, ".miec")) {
 		printf("Fehler: Eingabedatei muss die Erweiterung .miec haben\n");
 		return 1;
@@ -110,10 +110,10 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
-	// Versuche die Eingabedatei zu öffnen
+	// Versuche die Eingabedatei zu ï¿½ffnen
 	FILE* inFile = fopen(inputFile, "rb");
 	if (!inFile) {
-		printf("Fehler: Kann Eingabedatei nicht öffnen: %s\n", inputFile);
+		printf("Fehler: Kann Eingabedatei nicht ï¿½ffnen: %s\n", inputFile);
 		return 1;
 	}
 
@@ -128,7 +128,7 @@ int main(int argc, char* argv[]) {
 		// Parser starten
 		parser->Parse();
 
-		// Fehleranzahl prüfen
+		// Fehleranzahl prï¿½fen
 		int errorCount = parser->errors->count;
 
 		// Report schreiben
@@ -146,7 +146,7 @@ int main(int argc, char* argv[]) {
 			printf("Warnung: Kann Ausgabedatei nicht erstellen: %s\n", outputFile);
 		}
 
-		// Rückgabewert basierend auf Fehleranzahl
+		// Rï¿½ckgabewert basierend auf Fehleranzahl
 		int returnCode = (errorCount > 0) ? 1 : 0;
 
 		// Speicher freigeben
@@ -165,7 +165,7 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 	catch (...) {
-		printf("Unbekannter Fehler während der Kompilation\n");
+		printf("Unbekannter Fehler wï¿½hrend der Kompilation\n");
 		if (inFile) fclose(inFile);
 		if (parser) delete parser;
 		if (scanner) delete scanner;
