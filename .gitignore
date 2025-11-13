@@ -79,3 +79,4 @@ $RECYCLE.BIN/
 *.log
 *.suo
 *.exe
+!Coco/Coco.exe
