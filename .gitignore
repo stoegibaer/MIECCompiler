@@ -64,3 +64,11 @@ $RECYCLE.BIN/
 
 # macOS-spezifische temporäre Dateien
 .DS_Store
+
+# miec compiler mist
+*.tlog
+*.lastbuildstate
+*.old
+*.report
+*.pdb
+*.idb
