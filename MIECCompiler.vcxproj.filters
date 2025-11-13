@@ -24,12 +24,18 @@
     <ClCompile Include="MiniIEC\Parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SymbolTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MiniIEC\Scanner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MiniIEC\Parser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SymbolTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

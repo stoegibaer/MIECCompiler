@@ -431,14 +431,14 @@ void Scanner::Init() {
 	start.set(59, 3);
 	start.set(40, 5);
 	start.set(41, 6);
-	start.set(43, 7);
-	start.set(45, 8);
-	start.set(42, 9);
-	start.set(47, 10);
-	start.set(61, 11);
+	start.set(61, 7);
 	start.set(60, 17);
 	start.set(62, 18);
-	start.set(33, 14);
+	start.set(33, 10);
+	start.set(43, 12);
+	start.set(45, 13);
+	start.set(42, 14);
+	start.set(47, 15);
 		start.set(Buffer::EoF, -1);
 	keywords.set(L"PROGRAM", 3);
 	keywords.set(L"BEGIN", 4);
@@ -631,37 +631,37 @@ Token* Scanner::NextToken() {
 		case 7:
 			{t->kind = 20; break;}
 		case 8:
+			case_8:
 			{t->kind = 21; break;}
 		case 9:
+			case_9:
 			{t->kind = 22; break;}
 		case 10:
-			{t->kind = 23; break;}
-		case 11:
-			{t->kind = 24; break;}
-		case 12:
-			case_12:
-			{t->kind = 25; break;}
-		case 13:
-			case_13:
-			{t->kind = 26; break;}
-		case 14:
-			if (ch == L'=') {AddCh(); goto case_15;}
+			if (ch == L'=') {AddCh(); goto case_11;}
 			else {goto case_0;}
-		case 15:
-			case_15:
+		case 11:
+			case_11:
+			{t->kind = 23; break;}
+		case 12:
+			{t->kind = 26; break;}
+		case 13:
 			{t->kind = 27; break;}
+		case 14:
+			{t->kind = 28; break;}
+		case 15:
+			{t->kind = 29; break;}
 		case 16:
 			recEnd = pos; recKind = 8;
 			if (ch == L'=') {AddCh(); goto case_4;}
 			else {t->kind = 8; break;}
 		case 17:
-			recEnd = pos; recKind = 28;
-			if (ch == L'=') {AddCh(); goto case_12;}
-			else {t->kind = 28; break;}
+			recEnd = pos; recKind = 24;
+			if (ch == L'=') {AddCh(); goto case_8;}
+			else {t->kind = 24; break;}
 		case 18:
-			recEnd = pos; recKind = 29;
-			if (ch == L'=') {AddCh(); goto case_13;}
-			else {t->kind = 29; break;}
+			recEnd = pos; recKind = 25;
+			if (ch == L'=') {AddCh(); goto case_9;}
+			else {t->kind = 25; break;}
 
 	}
 	AppendVal(t);

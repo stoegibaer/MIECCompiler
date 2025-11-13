@@ -3,6 +3,10 @@
 #if !defined(MIEC_COCO_PARSER_H__)
 #define MIEC_COCO_PARSER_H__
 
+#include "SymbolTable.h"
+#include <string>
+#include <sstream>
+#include <stdexcept>
 
 
 #include "Scanner.h"
@@ -50,37 +54,42 @@ public:
 	Token *t;			// last recognized token
 	Token *la;			// lookahead token
 
-int // types
-	  undef, integer;
+SymbolTable mSymTab;
 
-	int // object kinds
-	  var;
+// Helper method: convert Token->val (wchar_t*) to std::wstring
+std::wstring TokenToWString(Token* tok) {
+    if (!tok || !tok->val) return L"";
+    return std::wstring(tok->val);
+}
 
-	int // opcodes
-	  ADD, SUB, MUL, DIV, EQU, LSS, GTR, LEQ, GEQ, NEQ,
-	  LOAD, LOADG, STO, STOG, CONST,
-	  JMP, FJMP, ENTER, LEAVE, WRITE;
-	
-	SymbolTable   *tab;
-	CodeGenerator *gen;
+// Helper method: convert number token to long long
+long long TokenToInt(Token* tok) {
+    if (!tok || !tok->val) return 0;
+    std::wstring ws(tok->val);
+    try {
+        return std::stoll(ws);
+    } catch (...) {
+        return 0;
+    }
+}
 
-	void Err(wchar_t* msg) {
-		errors->Error(la->line, la->col, msg);
-	}
+// Helper method: check if two types are assignment compatible
+bool AreTypesCompatible(TypePtr t1, TypePtr t2) {
+    if (!t1 || !t2) return false;
+    // In MIEC we only have Integer type, so they must be the same
+    return t1->name == t2->name;
+}
 
-	void InitDeclarations() {
-		undef = 0; integer = 1;  // types
-		var = 0;                  // object kinds
+// Helper method: semantic error reporting
+void SemanticError(const std::wstring& msg, int line, int col) {
+    std::wstring fullMsg = L"Semantic error: " + msg;
+    // Convert to char* for Error function
+    std::string narrow(fullMsg.begin(), fullMsg.end());
+    wchar_t* wmsg = coco_string_create(fullMsg.c_str());
+    errors->Error(line, col, wmsg);
+    coco_string_delete(wmsg);
+}
 
-		// opcodes
-		ADD  =  0; SUB  =  1; MUL  =  2; DIV  =  3;
-		EQU  =  4; LSS  =  5; GTR  =  6; LEQ  =  7; GEQ  =  8; NEQ  =  9;
-		LOAD = 10; LOADG = 11; STO = 12; STOG = 13; CONST = 14;
-		JMP  = 15; FJMP = 16; ENTER = 17; LEAVE = 18; WRITE = 19;
-	}
-
-
-/*--------------------------------------------------------------------------*/
 
 
 	Parser(Scanner *scanner);
@@ -88,18 +97,21 @@ int // types
 	void SemErr(const wchar_t* msg);
 
 	void MIEC();
-	void Ident(wchar_t* &name);
 	void VarDecl();
 	void Statements();
 	void VarDeclList();
 	void Stat();
-	void Expr(int &type);
-	void Condition();
-	void Term(int &type);
-	void AddOp(int &op);
-	void Factor(int &type);
-	void MulOp(int &op);
-	void Relop(int &op);
+	void Assignment();
+	void PrintStatement();
+	void WhileStatement();
+	void IfStatement();
+	void Expr(TypePtr& type);
+	void Condition(TypePtr& type);
+	void Term(TypePtr& type);
+	void AddOp();
+	void Factor(TypePtr& type);
+	void MulOp();
+	void Relop();
 
 	void Parse();
 

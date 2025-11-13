@@ -1,0 +1,22 @@
+PROGRAM Demo
+BEGIN_VAR
+    a : Integer;
+    b : Integer;
+    c : Integer;
+END_VAR
+BEGIN
+    a := 5;
+    b := 10;
+    c := a + b * 2;
+    print(c);
+
+    IF c > 10 THEN
+        print(a);
+    ELSE
+        print(b);
+    END
+
+    WHILE a < b DO
+        a := a + 1;
+    END
+END

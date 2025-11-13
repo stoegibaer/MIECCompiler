@@ -1,0 +1,11 @@
+PROGRAM BadExample
+BEGIN_VAR
+    x : Integer;
+    x : Integer;          (* Doppeldeklaration *)
+    y : Integer;
+END_VAR
+BEGIN
+    z := 5;               (* Variable nicht deklariert *)
+    x := y + "abc";       (* Ungültiger Ausdruck / Typfehler *)
+    print(u);             (* Unbekannte Variable *)
+END

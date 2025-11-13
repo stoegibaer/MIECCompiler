@@ -3,20 +3,8 @@
   "WorkspaceRootPath": "D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5D250980-6195-4E41-B5D7-6EB7EFCCB538}|MIECCompiler.vcxproj|D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\MiniIEC\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{5D250980-6195-4E41-B5D7-6EB7EFCCB538}|MIECCompiler.vcxproj|solutionrelative:MiniIEC\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{5D250980-6195-4E41-B5D7-6EB7EFCCB538}|MIECCompiler.vcxproj|D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\MiniIEC\\MIEC.atg||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{5D250980-6195-4E41-B5D7-6EB7EFCCB538}|MIECCompiler.vcxproj|solutionrelative:MiniIEC\\MIEC.atg||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5D250980-6195-4E41-B5D7-6EB7EFCCB538}|MIECCompiler.vcxproj|D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\MiniIEC\\Parser.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{5D250980-6195-4E41-B5D7-6EB7EFCCB538}|MIECCompiler.vcxproj|solutionrelative:MiniIEC\\Parser.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5D250980-6195-4E41-B5D7-6EB7EFCCB538}|MIECCompiler.vcxproj|D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\MiniIEC\\Scanner.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{5D250980-6195-4E41-B5D7-6EB7EFCCB538}|MIECCompiler.vcxproj|solutionrelative:MiniIEC\\Scanner.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5D250980-6195-4E41-B5D7-6EB7EFCCB538}|MIECCompiler.vcxproj|D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\MiniIEC\\Parser.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -25,6 +13,26 @@
     {
       "AbsoluteMoniker": "D:0:0:{5D250980-6195-4E41-B5D7-6EB7EFCCB538}|MIECCompiler.vcxproj|D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\MiniIEC\\Scanner.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{5D250980-6195-4E41-B5D7-6EB7EFCCB538}|MIECCompiler.vcxproj|solutionrelative:MiniIEC\\Scanner.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5D250980-6195-4E41-B5D7-6EB7EFCCB538}|MIECCompiler.vcxproj|D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\SymbolTable.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{5D250980-6195-4E41-B5D7-6EB7EFCCB538}|MIECCompiler.vcxproj|solutionrelative:SymbolTable.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5D250980-6195-4E41-B5D7-6EB7EFCCB538}|MIECCompiler.vcxproj|D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\MiniIEC\\Scanner.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{5D250980-6195-4E41-B5D7-6EB7EFCCB538}|MIECCompiler.vcxproj|solutionrelative:MiniIEC\\Scanner.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5D250980-6195-4E41-B5D7-6EB7EFCCB538}|MIECCompiler.vcxproj|D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\SymbolTable.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{5D250980-6195-4E41-B5D7-6EB7EFCCB538}|MIECCompiler.vcxproj|solutionrelative:SymbolTable.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5D250980-6195-4E41-B5D7-6EB7EFCCB538}|MIECCompiler.vcxproj|D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\MiniIEC\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{5D250980-6195-4E41-B5D7-6EB7EFCCB538}|MIECCompiler.vcxproj|solutionrelative:MiniIEC\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5D250980-6195-4E41-B5D7-6EB7EFCCB538}|MIECCompiler.vcxproj|D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\MiniIEC\\Parser.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{5D250980-6195-4E41-B5D7-6EB7EFCCB538}|MIECCompiler.vcxproj|solutionrelative:MiniIEC\\Parser.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,50 +42,71 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 5,
+              "Title": "SymbolTable.cpp",
+              "DocumentMoniker": "D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\SymbolTable.cpp",
+              "RelativeDocumentMoniker": "SymbolTable.cpp",
+              "ToolTip": "D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\SymbolTable.cpp",
+              "RelativeToolTip": "SymbolTable.cpp",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAowDQAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-11-12T18:18:14.022Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "SymbolTable.h",
+              "DocumentMoniker": "D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\SymbolTable.h",
+              "RelativeDocumentMoniker": "SymbolTable.h",
+              "ToolTip": "D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\SymbolTable.h",
+              "RelativeToolTip": "SymbolTable.h",
+              "ViewState": "AgIAADwAAAAAAAAAAAAAAE0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-11-12T18:17:46.463Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "Scanner.h",
               "DocumentMoniker": "D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\MiniIEC\\Scanner.h",
               "RelativeDocumentMoniker": "MiniIEC\\Scanner.h",
               "ToolTip": "D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\MiniIEC\\Scanner.h",
               "RelativeToolTip": "MiniIEC\\Scanner.h",
-              "ViewState": "AgIAAOIAAAAAAAAAAAAmwAcBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAFsAAAAAAAAAAAAowGQAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-10-30T07:53:00.572Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-30T07:53:00.572Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "Parser.h",
               "DocumentMoniker": "D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\MiniIEC\\Parser.h",
               "RelativeDocumentMoniker": "MiniIEC\\Parser.h",
               "ToolTip": "D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\MiniIEC\\Parser.h",
               "RelativeToolTip": "MiniIEC\\Parser.h",
-              "ViewState": "AgIAAC8AAAAAAAAAAAAmwFQAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-10-30T07:52:28.585Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-30T07:52:28.585Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Scanner.cpp",
               "DocumentMoniker": "D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\MiniIEC\\Scanner.cpp",
               "RelativeDocumentMoniker": "MiniIEC\\Scanner.cpp",
               "ToolTip": "D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\MiniIEC\\Scanner.cpp",
               "RelativeToolTip": "MiniIEC\\Scanner.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-10-30T07:15:32.089Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-30T07:15:32.089Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 7,
               "Title": "Parser.cpp",
               "DocumentMoniker": "D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\MiniIEC\\Parser.cpp",
               "RelativeDocumentMoniker": "MiniIEC\\Parser.cpp",
@@ -85,34 +114,32 @@
               "RelativeToolTip": "MiniIEC\\Parser.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-10-30T07:15:25.175Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-30T07:15:25.175Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "MIEC.atg",
               "DocumentMoniker": "D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\MiniIEC\\MIEC.atg",
               "RelativeDocumentMoniker": "MiniIEC\\MIEC.atg",
               "ToolTip": "D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\MiniIEC\\MIEC.atg",
               "RelativeToolTip": "MiniIEC\\MIEC.atg",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHcAAAAEAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2025-10-30T07:15:18.336Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 6,
               "Title": "main.cpp",
               "DocumentMoniker": "D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\MiniIEC\\main.cpp",
               "RelativeDocumentMoniker": "MiniIEC\\main.cpp",
-              "ToolTip": "D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\MiniIEC\\main.cpp*",
-              "RelativeToolTip": "MiniIEC\\main.cpp*",
-              "ViewState": "AgIAAEsAAAAAAAAAAAAAAFEAAAAFAAAAAAAAAA==",
+              "ToolTip": "D:\\Dokumente\\FH\\Master\\3.Semester\\COMP3\\\u00DCbung\\MIECCompiler\\MIECCompiler\\MiniIEC\\main.cpp",
+              "RelativeToolTip": "MiniIEC\\main.cpp",
+              "ViewState": "AgIAAEMAAAAAAAAAAAAowKAAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-10-30T07:15:03.718Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-30T07:15:03.718Z"
             }
           ]
         }
