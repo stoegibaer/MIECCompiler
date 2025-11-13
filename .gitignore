@@ -41,6 +41,8 @@ ipch/
 
 # Visual Studio Verzeichnis
 .vs/
+.vs
+.vs\
 
 # Sonstige temporäre Dateien und Logs
 *.log
