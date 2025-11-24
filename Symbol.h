@@ -37,10 +37,8 @@ public:
 };
 
 class TypeSymbol : public Symbol {
-
+    std::shared_ptr
 };
-
-
 
 }
 #endif

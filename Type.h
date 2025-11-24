@@ -28,46 +28,46 @@ namespace MIEC {
 		Symbol GetTypeSymbol();
 
 	private:
-		TypeSymbol mTypeSymbol;
+		TypeSymbol* mTypeSymbol;
 	};
 
-	//=========================================================
+	////=========================================================
 
-	class BaseType : public Type
-	{
-	public:
-		int GetSize() override;
-		TypeKind GetKind();
+	//class BaseType : public Type
+	//{
+	//public:
+	//	int GetSize() override;
+	//	TypeKind GetKind();
 
-	private:
-		TypeKind mType;
-	};
+	//private:
+	//	TypeKind mType;
+	//};
 
-	//=========================================================
+	////=========================================================
 
-	class StringType : public Type
-	{
-	public: 
-		StringType(std::string const& value);
+	//class StringType : public Type
+	//{
+	//public: 
+	//	StringType(std::string const& value);
 
-		int GetSize() override;
+	//	int GetSize() override;
 
-		std::string GetStringVal();
+	//	std::string GetStringVal();
 
-	private:
-		int mLength;
-		std::string mValue;
-	};
+	//private:
+	//	int mLength;
+	//	std::string mValue;
+	//};
 
-	//=========================================================
+	////=========================================================
 
-	class StructType : public Type {
-	public:	
-		int GetSize() override;
+	//class StructType : public Type {
+	//public:	
+	//	int GetSize() override;
 
-	private:
-		int mVal;
-	};
+	//private:
+	//	int mVal;
+	//};
 
 	//=========================================================
 
