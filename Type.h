@@ -12,13 +12,15 @@
 
 namespace MIEC {
 
+	//=========================================================
+
 	enum TypeKind {
 		eInt,
 		eFloat,
 		eChar,
-		eStruct,
-		eArray
 	};
+
+	//=========================================================
 
 	class Type
 	{
@@ -29,20 +31,27 @@ namespace MIEC {
 		TypeSymbol mTypeSymbol;
 	};
 
+	//=========================================================
+
 	class BaseType : public Type
 	{
 	public:
-		int GetSize();
+		int GetSize() override;
 		TypeKind GetKind();
 
 	private:
 		TypeKind mType;
 	};
 
+	//=========================================================
+
 	class StringType : public Type
 	{
 	public: 
-		int GetSize();
+		StringType(std::string const& value);
+
+		int GetSize() override;
+
 		std::string GetStringVal();
 
 	private:
@@ -50,15 +59,17 @@ namespace MIEC {
 		std::string mValue;
 	};
 
+	//=========================================================
+
 	class StructType : public Type {
 	public:	
-		int GetSize();
+		int GetSize() override;
 
 	private:
 		int mVal;
 	};
 
-
+	//=========================================================
 
 } // namespace MIEC
 

@@ -4,19 +4,54 @@
 
 namespace MIEC {
 
-	Symbol Type::GetTypeSymbol()
-	{
-		return Symbol();
-	}
+	//Symbol Type::GetTypeSymbol()
+	//{
+	//	return Symbol();
+	//}
+
 
 	int BaseType::GetSize()
 	{
-		return 0;
+		int size = 0;
+
+		switch (mType)
+		{
+		case MIEC::eInt:
+			size = sizeof(int);
+			break;
+
+		case MIEC::eFloat:
+			size = sizeof(float);
+			break;
+		case MIEC::eChar:
+			size = sizeof(char);
+			break;
+		}
+
+		return size;
 	}
 
 	TypeKind BaseType::GetKind()
 	{
-		return TypeKind();
+		return mType;
 	}
+
+	//=========================================================
+
+	int StringType::GetSize()
+	{
+		mLength = mValue.size();
+		return mLength;
+	}
+
+	std::string StringType::GetStringVal()
+	{
+		return mValue;
+	}
+
+	//=========================================================
+
+
+
 
 } // namespace MIEC
