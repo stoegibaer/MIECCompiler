@@ -2,6 +2,8 @@
 *.suo
 *.user
 *.sln.docstates
+*.vcxproj
+*.vcxproj.filters
 
 # Build-Ergebnisse
 [Dd]ebug/

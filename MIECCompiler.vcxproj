@@ -43,6 +43,7 @@
     <ClInclude Include="MiniIEC\Scanner.h" />
     <ClInclude Include="Symbol.h" />
     <ClInclude Include="SymbolTable.h" />
+    <ClInclude Include="Type.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
