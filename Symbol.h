@@ -9,7 +9,7 @@ namespace MIEC {
 class Symbol {
 private:
     std::string mName;
-    Type mType;
+    std::unique_ptr<Type> mType;
 
 public:
     Symbol(const std::string& name);
