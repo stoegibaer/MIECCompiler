@@ -80,4 +80,21 @@ namespace MIEC {
 		return mElems;
 	}
 
+	//=========================================================
+
+	int ArrayType::GetCount() const
+	{
+		return mCount;
+	}
+
+	Type* ArrayType::GetElemType() const
+	{
+		return mElemType;
+	}
+
+	int ArrayType::GetSize()
+	{
+		return mElemType->GetSize() * mCount;
+	}
+
 } // namespace MIEC

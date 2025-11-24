@@ -85,6 +85,17 @@ namespace MIEC {
 
 	//=========================================================
 
+	class ArrayType : public Type
+	{
+	public:
+		int GetCount() const;
+		Type* GetElemType() const;
+		int GetSize() override;
+
+	private:
+		Type* mElemType; // element type
+		int mCount;     
+	};
 } // namespace MIEC
 
 #endif
