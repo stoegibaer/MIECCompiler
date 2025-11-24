@@ -15,14 +15,14 @@ namespace MIEC {
     public:
         static SymbolTable& GetInstance();
 
-        void Add(std::unique_ptr<Symbol> sym);
-        std::unique_ptr<Symbol> Find(std::string str);
-        void Delete(/*todo*/);
+        bool AddVar(const std::string& name, int offset);
+        Symbol* Find(const std::string& name);
+        void Clear();
 
     private:
         SymbolTable() = default;
         SymbolTable(const SymbolTable&) = delete;
         SymbolTable& operator=(const SymbolTable&) = delete;
-        std::vector<std::unique_ptr<Symbol>> symbols;
+        std::unordered_map<std::string, std::unique_ptr<Symbol>> vars;
 	};
 } // namespace MIEC

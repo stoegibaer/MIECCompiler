@@ -9,12 +9,20 @@ std::string MIEC::Symbol::GetName() const
 	return mName;
 }
 
-Type MIEC::Symbol::GetType() const
-{
-	return mType;
-}
+//Type* MIEC::Symbol::GetType() const
+//{
+//	return mType;
+//}
 
 int MIEC::ConstSymbol::GetValue()
 {
 	return mValue;
+}
+
+MIEC::VarSymbol::VarSymbol(const std::string& n, int off) : Symbol(n), mOffset(off)
+{}
+
+int MIEC::VarSymbol::GetOffset() const
+{
+	return mOffset;
 }
