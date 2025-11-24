@@ -1,10 +1,11 @@
 #include "Type.h"
+#include "Symbol.h" // -> avoid circular dependency
 #include <sstream>
 #include <algorithm>
 
 namespace MIEC {
 
-	Symbol Type::GetTypeSymbol()
+	TypeSymbol* Type::GetTypeSymbol() const
 	{
 		return mTypeSymbol;
 	}

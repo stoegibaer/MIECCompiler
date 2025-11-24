@@ -1,3 +1,4 @@
+#include "Type.h" // -> avoids circular dependency
 #include "Symbol.h"
 
 MIEC::Symbol::Symbol(const std::string& name) : mName(name)
@@ -26,3 +27,9 @@ int MIEC::VarSymbol::GetOffset() const
 {
 	return mOffset;
 }
+
+
+MIEC::Type* MIEC::TypeSymbol::GetType() const {
+	return mType;
+}
+
