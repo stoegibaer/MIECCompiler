@@ -34,41 +34,54 @@ namespace MIEC {
 
 	////=========================================================
 
-	//class BaseType : public Type
-	//{
-	//public:
-	//	int GetSize() override;
-	//	TypeKind GetKind();
+	class BaseType : public Type
+	{
+	public:
+		int GetSize() override;
+		TypeKind GetKind();
 
-	//private:
-	//	TypeKind mType;
-	//};
-
-	////=========================================================
-
-	//class StringType : public Type
-	//{
-	//public: 
-	//	StringType(std::string const& value);
-
-	//	int GetSize() override;
-
-	//	std::string GetStringVal();
-
-	//private:
-	//	int mLength;
-	//	std::string mValue;
-	//};
+	private:
+		TypeKind mType;
+	};
 
 	////=========================================================
 
-	//class StructType : public Type {
-	//public:	
-	//	int GetSize() override;
+	class StringType : public Type
+	{
+	public: 
+		StringType(std::string const& value);
 
-	//private:
-	//	int mVal;
-	//};
+		int GetSize() override;
+
+		std::string GetStringVal();
+
+	private:
+		int mLength;
+		std::string mValue;
+	};
+
+	////=========================================================
+	#pragma once
+	class VarSymbol;
+
+	class StructType : public Type {
+	public:	
+		struct Elem {
+			std::string name;
+			VarSymbol* VarSymbol;
+			int offset;
+		};
+
+		int GetSize() override;
+		std::string GetName();
+		void AddField(const std::string& name, VarSymbol* var);
+		std::vector<StructType::Elem> GetField();
+
+	private:
+		int mSize;
+		std::string mName;
+		std::vector<Elem> mElems;
+	};
 
 	//=========================================================
 
