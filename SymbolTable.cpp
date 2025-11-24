@@ -12,13 +12,21 @@ namespace MIEC {
         return instance;
     }
 
-    void SymbolTable::Add(std::unique_ptr<Symbol> sym)
+    bool SymbolTable::AddVar(const std::string& name, int offset)
     {
+        if (vars.find(name) != vars.end()) return false;
+        vars[name] = std::make_unique<VarSymbol>(name, offset);
+        return true;
     }
 
-    std::unique_ptr<Symbol> SymbolTable::Find(std::string str)
+    Symbol* SymbolTable::Find(const std::string& name)
     {
-        return std::unique_ptr<Symbol>();
+        auto it = vars.find(name);
+        return it != vars.end() ? it->second.get() : nullptr;
+    }
+    void SymbolTable::Clear()
+    {
+        vars.clear();
     }
 
 } // namespace MIEC

@@ -9,7 +9,7 @@ namespace MIEC {
 class Symbol {
 private:
     std::string mName;
-    std::unique_ptr<Type> mType;
+    Type* mType;
 
 public:
     Symbol(const std::string& name);
@@ -18,7 +18,7 @@ public:
 
     std::string GetName() const;
 
-    virtual Type GetType() const;
+    //Type* GetType() const;
 };
 
 class ConstSymbol : public Symbol {
@@ -32,7 +32,8 @@ class VarSymbol : public Symbol {
 private:
     int mOffset;
 public:
-    int GetOffset();
+    VarSymbol(const std::string& n, int off);
+    int GetOffset() const;
 };
 
 class TypeSymbol : public Symbol {
