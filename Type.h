@@ -1,7 +1,7 @@
 #ifndef TYPE_H
 #define TYPE_H
 
-
+#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -38,6 +38,26 @@ namespace MIEC {
 	private:
 		TypeKind mType;
 	};
+
+	class StringType : public Type
+	{
+	public: 
+		int GetSize();
+		std::string GetStringVal();
+
+	private:
+		int mLength;
+		std::string mValue;
+	};
+
+	class StructType : public Type {
+	public:	
+		int GetSize();
+
+	private:
+		int mVal;
+	};
+
 
 
 } // namespace MIEC
