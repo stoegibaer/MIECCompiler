@@ -9,15 +9,11 @@ std::string MIEC::Symbol::GetName() const
 	return mName;
 }
 
-//Type* MIEC::Symbol::GetType() const
-//{
-//	return mType;
-//}
-
-int MIEC::ConstSymbol::GetValue()
+MIEC::Type* MIEC::Symbol::GetType() const
 {
-	return mValue;
+	return mType;
 }
+
 
 MIEC::VarSymbol::VarSymbol(const std::string& n, int off) : Symbol(n), mOffset(off)
 {}
@@ -25,4 +21,18 @@ MIEC::VarSymbol::VarSymbol(const std::string& n, int off) : Symbol(n), mOffset(o
 int MIEC::VarSymbol::GetOffset() const
 {
 	return mOffset;
+}
+
+MIEC::TypeSymbol::TypeSymbol(const std::string& name) : Symbol(name)
+{
+}
+
+MIEC::ConstSymbol::ConstSymbol(const std::string& name, int value)
+	: Symbol(name), mValue(value)
+{
+}
+
+int MIEC::ConstSymbol::GetValue() const
+{
+	return mValue;
 }

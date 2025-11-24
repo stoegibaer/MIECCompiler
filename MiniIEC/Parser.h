@@ -6,7 +6,6 @@
 
 
 #include "Scanner.h"
-#include <SymbolTable.h>
 
 namespace MIEC {
 
@@ -36,8 +35,6 @@ private:
 	Token *dummyToken;
 	int errDist;
 	int minErrDist;
-	SymbolTable& mSymTab;
-	int mCurrOffset = 0;
 
 	void SynErr(int n);
 	void Get();
@@ -45,7 +42,6 @@ private:
 	bool StartOf(int s);
 	void ExpectWeak(int n, int follow);
 	bool WeakSeparator(int n, int syFol, int repFol);
-
 
 public:
 	Scanner *scanner;

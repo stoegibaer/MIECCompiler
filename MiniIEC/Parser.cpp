@@ -1,10 +1,8 @@
 
 
 #include <wchar.h>
-#include <iostream>
 #include "Parser.h"
 #include "Scanner.h"
-#include "SymbolTable.h"
 
 
 namespace MIEC {
@@ -89,32 +87,14 @@ void Parser::Statements() {
 
 void Parser::VarDeclList() {
 		Expect(_ident);
-		std::string varName = coco_string_create_char(t->val);
 		Expect(8 /* ":" */);
 		Expect(9 /* "Integer" */);
 		Expect(10 /* ";" */);
-		if (!mSymTab.AddVar(varName, mCurrOffset))
-		{
-			SemErr(L"Doppeldeklaration von Variable");
-		}
-		else
-		{
-			mCurrOffset += 4; // Integer: 4 Bytes
-		}
 		while (la->kind == _ident) {
 			Get();
-			std::string varName = coco_string_create_char(t->val);
 			Expect(8 /* ":" */);
 			Expect(9 /* "Integer" */);
 			Expect(10 /* ";" */);
-			if (!mSymTab.AddVar(varName, mCurrOffset))
-			{
-				SemErr(L"Doppeldeklaration von Variable");
-			}
-			else
-			{
-				mCurrOffset += 4; // Integer: 4 Bytes
-			}
 		}
 }
 
@@ -132,13 +112,8 @@ void Parser::Stat() {
 
 void Parser::Assignment() {
 		Expect(_ident);
-		std::string varName = coco_string_create_char(t->val);
 		Expect(11 /* ":=" */);
 		Expr();
-		if (!mSymTab.Find(varName))
-		{
-			SemErr(L"Variable nicht deklariert!");
-		}
 		Expect(10 /* ";" */);
 }
 
@@ -203,11 +178,6 @@ void Parser::AddOp() {
 void Parser::Factor() {
 		if (la->kind == _ident) {
 			Get();
-			std::string varName = coco_string_create_char(t->val);
-			if (!mSymTab.Find(varName))
-			{
-				SemErr(L"Variable nicht deklariert!");
-			}
 		} else if (la->kind == _number) {
 			Get();
 		} else if (la->kind == 13 /* "(" */) {
@@ -355,7 +325,7 @@ void Parser::Parse() {
 	Expect(0);
 }
 
-Parser::Parser(Scanner *scanner) : mSymTab(SymbolTable::GetInstance()) {
+Parser::Parser(Scanner *scanner) {
 	maxT = 30;
 
 	ParserInitCaller<Parser>::CallInit(this);

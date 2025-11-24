@@ -9,23 +9,22 @@ namespace MIEC {
 class Symbol {
 private:
     std::string mName;
-    //Type* mType;
+    Type* mType;
 
 public:
     Symbol(const std::string& name);
-
     virtual ~Symbol() = default;
 
     std::string GetName() const;
-
-    //Type* GetType() const;
+    Type* GetType() const;
 };
 
 class ConstSymbol : public Symbol {
 private:
     int mValue;
 public:
-    int GetValue();
+    ConstSymbol(const std::string& name, int value);
+    int GetValue() const;
 };
 
 class VarSymbol : public Symbol {
@@ -37,7 +36,8 @@ public:
 };
 
 class TypeSymbol : public Symbol {
-
+public:
+    TypeSymbol(const std::string& name);
 };
 
 

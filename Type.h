@@ -11,6 +11,7 @@
 #include "Symbol.h"
 
 namespace MIEC {
+	class TypeSymbol;
 
 	enum TypeKind {
 		eInt,
@@ -22,18 +23,20 @@ namespace MIEC {
 
 	class Type
 	{
+		//virtual ~Type() = default;
 		virtual int GetSize() = 0;
-		Symbol GetTypeSymbol();
+		TypeSymbol* GetTypeSymbol();
 
-	private:
-		TypeSymbol mTypeSymbol;
+	protected:
+		TypeSymbol* mTypeSymbol;
 	};
 
 	class BaseType : public Type
 	{
 	public:
-		int GetSize();
-		TypeKind GetKind();
+		BaseType(TypeKind kind);
+		int GetSize() override;
+		TypeKind GetKind() const;
 
 	private:
 		TypeKind mType;
@@ -41,8 +44,9 @@ namespace MIEC {
 
 	class StringType : public Type
 	{
-	public: 
-		int GetSize();
+	public:
+		StringType(int length);
+		int GetSize() override;
 		std::string GetStringVal();
 
 	private:
@@ -52,6 +56,7 @@ namespace MIEC {
 
 	class StructType : public Type {
 	public:	
+		StructType(int size);
 		int GetSize();
 
 	private:
