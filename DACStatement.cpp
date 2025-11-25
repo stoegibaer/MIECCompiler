@@ -2,28 +2,28 @@
 
 namespace MIEC {
 
-	DACStatement::DACStatement(Operand const& firstOp, Operand const& secondOp, TOpKind const op) :
-		mFirstOperand(firstOp), mSecondOperand(secondOp), mOpperation(op)
-	{
-	}
+	//DACStatement::DACStatement(Operand const& firstOp, Operand const& secondOp, TOpKind const op) :
+	//	mFirstOperand(firstOp), mSecondOperand(secondOp), mOpperation(op)
+	//{
+	//}
 
-	DACStatement::DACStatement(Operand const& firstOp, TOpKind const op) :
-		mFirstOperand(firstOp), mSecondOperand(firstOp), mOpperation(op)
-	{
-	}
+	//DACStatement::DACStatement(Operand const& firstOp, TOpKind const op) :
+	//	mFirstOperand(firstOp), mSecondOperand(firstOp), mOpperation(op)
+	//{
+	//}
 
-	Operand DACStatement::GetFirst()
-	{
-		return mFirstOperand;
-	}
+	//Operand DACStatement::GetFirst()
+	//{
+	//	return mFirstOperand;
+	//}
 
-	Operand DACStatement::GetSecond()
-	{
-		return mSecondOperand;
-	}
+	//Operand DACStatement::GetSecond()
+	//{
+	//	return mSecondOperand;
+	//}
 
-	TOpKind DACStatement::GetOpType()
-	{
-		return mOpperation;
-	}
+	//TOpKind DACStatement::GetOpType()
+	//{
+	//	return mOpperation;
+	//}
 }

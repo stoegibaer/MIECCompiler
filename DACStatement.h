@@ -5,48 +5,48 @@
 namespace MIEC {
 
 	// TODO; delete when operand is implemented
-	class Operand
-	{
-	public:
-		Operand();
-		~Operand();
+	//class Operand
+	//{
+	//public:
+	//	Operand();
+	//	~Operand();
 
-	private:
+	//private:
 
-	};
+	//};
 
-	Operand::Operand()
-	{
-	}
+	//Operand::Operand()
+	//{
+	//}
 
-	Operand::~Operand()
-	{
-	}
+	//Operand::~Operand()
+	//{
+	//}
 
-	// Operand kind
-	enum class TOpKind {
-		eAdd, eSubtract, eMultiply, eDivide, eIsEqual, eIsLessEqual, eIsGreaterEqual,
-		eIsNotEqual, eIsLess, eIsGreater, eAssign, eJump, eIfJump, eIfFalseJump, ePrint,
-		eExit
-	};
-	
+	//// Operand kind
+	//enum class TOpKind {
+	//	eAdd, eSubtract, eMultiply, eDivide, eIsEqual, eIsLessEqual, eIsGreaterEqual,
+	//	eIsNotEqual, eIsLess, eIsGreater, eAssign, eJump, eIfJump, eIfFalseJump, ePrint,
+	//	eExit
+	//};
+	//
 
-	// Store information about a single operation line
-	class DACStatement
-	{
-	public:
-		DACStatement(Operand const& firstOp, Operand const& secondOp, TOpKind const op);
-		DACStatement(Operand const& firstOp, TOpKind const op);
-		virtual ~DACStatement() = default;
-		Operand GetFirst();
-		Operand GetSecond();
-		TOpKind GetOpType();
+	//// Store information about a single operation line
+	//class DACStatement
+	//{
+	//public:
+	//	DACStatement(Operand const& firstOp, Operand const& secondOp, TOpKind const op);
+	//	DACStatement(Operand const& firstOp, TOpKind const op);
+	//	virtual ~DACStatement() = default;
+	//	Operand GetFirst();
+	//	Operand GetSecond();
+	//	TOpKind GetOpType();
 
-	private:
-		Operand mFirstOperand;
-		Operand mSecondOperand;
-		TOpKind mOpperation;
-	};
+	//private:
+	//	Operand mFirstOperand;
+	//	Operand mSecondOperand;
+	//	TOpKind mOpperation;
+	//};
 }
 
 
