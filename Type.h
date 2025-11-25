@@ -25,6 +25,7 @@ namespace MIEC {
 
 	class Type
 	{
+	public:
 		TypeSymbol* GetTypeSymbol() const;
 		virtual int GetSize() = 0;
 
