@@ -84,3 +84,4 @@ $RECYCLE.BIN/
 *.suo
 *.exe
 !Coco/Coco.exe
+*.exe.recipe
