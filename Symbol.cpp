@@ -1,38 +1,46 @@
 #include "Symbol.h"
 
-MIEC::Symbol::Symbol(const std::string& name) : mName(name)
-{
-}
+namespace MIEC {
 
-std::string MIEC::Symbol::GetName() const
-{
-	return mName;
-}
+    Symbol::Symbol(const std::string& name) : mName(name), mType(nullptr) {
+    }
 
-MIEC::Type* MIEC::Symbol::GetType() const
-{
-	return mType;
-}
+    std::string Symbol::GetName() const {
+        return mName;
+    }
 
+    Type* Symbol::GetType() const {
+        return mType;
+    }
 
-MIEC::VarSymbol::VarSymbol(const std::string& n, int off) : Symbol(n), mOffset(off)
-{}
+    void Symbol::SetType(Type* type) {
+        mType = type;
+    }
 
-int MIEC::VarSymbol::GetOffset() const
-{
-	return mOffset;
-}
+    // ConstSymbol
+    ConstSymbol::ConstSymbol(const std::string& name, int value, Type* type)
+        : Symbol(name), mValue(value) {
+        SetType(type);
+    }
 
-MIEC::TypeSymbol::TypeSymbol(const std::string& name) : Symbol(name)
-{
-}
+    int ConstSymbol::GetValue() const {
+        return mValue;
+    }
 
-MIEC::ConstSymbol::ConstSymbol(const std::string& name, int value)
-	: Symbol(name), mValue(value)
-{
-}
+    // VarSymbol
+    VarSymbol::VarSymbol(const std::string& name, Type* type, int offset)
+        : Symbol(name), mOffset(offset) {
+        SetType(type);
+    }
 
-int MIEC::ConstSymbol::GetValue() const
-{
-	return mValue;
-}
+    int VarSymbol::GetOffset() const {
+        return mOffset;
+    }
+
+    // TypeSymbol
+    TypeSymbol::TypeSymbol(const std::string& name, Type* type)
+        : Symbol(name) {
+        SetType(type);
+    }
+
+} // namespace MIEC

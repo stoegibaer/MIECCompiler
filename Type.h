@@ -1,70 +1,46 @@
 #ifndef TYPE_H
 #define TYPE_H
-
 #include <iostream>
 #include <string>
-#include <unordered_map>
-#include <vector>
-#include <memory>
-#include <stdexcept>
 
 namespace MIEC {
-	class TypeSymbol;
 
-	enum TypeKind {
-		eInt,
-		eFloat,
-		eChar,
-		eStruct,
-		eArray
-	};
+    class TypeSymbol;
 
-	class Type
-	{
-	public:
-		//virtual ~Type() = default;
-		virtual int GetSize() = 0;
-		TypeSymbol* GetTypeSymbol();
+    enum TypeKind {
+        eInt,
+        eFloat,
+        eChar,
+        eStruct,
+        eArray
+    };
 
-	protected:
-		TypeSymbol* mTypeSymbol;
-	};
+    class Type {
+    public:
+        virtual ~Type() = default;
+        virtual int GetSize() = 0;
+        virtual TypeKind GetKind() const = 0;
 
-	class BaseType : public Type
-	{
-	public:
-		BaseType(TypeKind kind);
-		int GetSize() override;
-		TypeKind GetKind() const;
+        TypeSymbol* GetTypeSymbol();
+        void SetTypeSymbol(TypeSymbol* typeSymbol);
 
-	private:
-		TypeKind mType;
-	};
+        // Typenkompatibilität prüfen
+        bool IsCompatible(Type* other);
 
-	class StringType : public Type
-	{
-	public:
-		StringType(int length);
-		int GetSize() override;
-		std::string GetStringVal();
+    protected:
+        TypeSymbol* mTypeSymbol;
+    };
 
-	private:
-		int mLength;
-		std::string mValue;
-	};
+    class BaseType : public Type {
+    public:
+        BaseType(TypeKind kind);
+        int GetSize() override;
+        TypeKind GetKind() const override;
 
-	class StructType : public Type {
-	public:	
-		StructType(int size);
-		int GetSize();
-
-	private:
-		int mVal;
-	};
-
-
+    private:
+        TypeKind mType;
+    };
 
 } // namespace MIEC
 
 #endif
-
