@@ -12,10 +12,10 @@ namespace MIEC {
         return instance;
     }
 
-    bool SymbolTable::AddVar(const std::string& name, int offset)
+    bool SymbolTable::AddVar(const std::string& name, Type* type, int offset)
     {
         if (vars.find(name) != vars.end()) return false;
-        vars[name] = std::make_unique<VarSymbol>(name, offset);
+        vars[name] = std::make_unique<VarSymbol>(name, type, offset);
         return true;
     }
 

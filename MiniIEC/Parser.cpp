@@ -1,10 +1,8 @@
 
 
 #include <wchar.h>
-#include <iostream>
 #include "Parser.h"
 #include "Scanner.h"
-#include "SymbolTable.h"
 
 
 namespace MIEC {
@@ -67,18 +65,20 @@ bool Parser::WeakSeparator(int n, int syFol, int repFol) {
 void Parser::MIEC() {
 		Expect(3 /* "PROGRAM" */);
 		Expect(_ident);
-		if (la->kind == 6 /* "BEGIN_VAR" */) {
+		if (la->kind == 9 /* "BEGIN_VAR" */) {
 			VarDecl();
 		}
 		Expect(4 /* "BEGIN" */);
 		Statements();
 		Expect(5 /* "END" */);
+		delete floatType; delete charType; delete intType; 
 }
 
 void Parser::VarDecl() {
-		Expect(6 /* "BEGIN_VAR" */);
+		std::string name; Symbol * type; 
+		Expect(9 /* "BEGIN_VAR" */);
 		VarDeclList();
-		Expect(7 /* "END_VAR" */);
+		Expect(10 /* "END_VAR" */);
 }
 
 void Parser::Statements() {
@@ -87,83 +87,87 @@ void Parser::Statements() {
 		}
 }
 
-void Parser::VarDeclList() {
-		Expect(_ident);
-		std::string varName = coco_string_create_char(t->val);
-		Expect(8 /* ":" */);
-		Expect(9 /* "Integer" */);
-		Expect(10 /* ";" */);
-		if (!mSymTab.AddVar(varName, mCurrOffset))
-		{
-			SemErr(L"Doppeldeklaration von Variable");
-		}
-		else
-		{
-			mCurrOffset += 4; // Integer: 4 Bytes
-		}
-		while (la->kind == _ident) {
+void Parser::Type(Type*& type) {
+		if (la->kind == 6 /* "Integer" */) {
 			Get();
-			std::string varName = coco_string_create_char(t->val);
-			Expect(8 /* ":" */);
-			Expect(9 /* "Integer" */);
-			Expect(10 /* ";" */);
-			if (!mSymTab.AddVar(varName, mCurrOffset))
-			{
-				SemErr(L"Doppeldeklaration von Variable");
-			}
-			else
-			{
-				mCurrOffset += 4; // Integer: 4 Bytes
-			}
+			type = intType; 
+		} else if (la->kind == 7 /* "Float" */) {
+			Get();
+			type = floatType; 
+		} else if (la->kind == 8 /* "Char" */) {
+			Get();
+			type = charType; 
+		} else SynErr(33);
+}
+
+void Parser::Ident(std::string &name) {
+		Expect(_ident);
+		char * nameChars = coco_string_create_char(t->val); 
+		name = nameChars;
+		coco_string_delete(nameChars); 
+}
+
+void Parser::VarDeclList() {
+		Ident(name);
+		Expect(11 /* ":" */);
+		Type(type);
+		Expect(12 /* ";" */);
+		if (!symTab.AddVar(name, type, 0)) errors->Exception(L"Variable mit Name schon deklariert"); 
+		while (la->kind == _ident) {
+			Ident(name);
+			Expect(11 /* ":" */);
+			Type(type);
+			Expect(12 /* ";" */);
+			if (!symTab.AddVar(name, type, 0)) errors->Exception(L"Variable mit Name schon deklariert"); 
 		}
 }
 
 void Parser::Stat() {
 		if (la->kind == _ident) {
 			Assignment();
-		} else if (la->kind == 12 /* "print" */) {
+		} else if (la->kind == 14 /* "print" */) {
 			PrintStatement();
-		} else if (la->kind == 15 /* "WHILE" */) {
+		} else if (la->kind == 17 /* "WHILE" */) {
 			WhileStatement();
-		} else if (la->kind == 17 /* "IF" */) {
+		} else if (la->kind == 19 /* "IF" */) {
 			IfStatement();
-		} else SynErr(31);
+		} else SynErr(34);
 }
 
 void Parser::Assignment() {
-		Expect(_ident);
-		std::string varName = coco_string_create_char(t->val);
-		Expect(11 /* ":=" */);
+		std::string name; 
+		Ident(name);
+		Symbol* sym = symTab.Find(name);
+		if(!sym) errors->Exception(L"Variable nicht deklariert");
+		// optional: Typprüfung! if (sym->GetType() != ExprType) ...
+		
+		Expect(13 /* ":=" */);
 		Expr();
-		if (!mSymTab.Find(varName))
-		{
-			SemErr(L"Variable nicht deklariert!");
-		}
-		Expect(10 /* ";" */);
+		Expect(12 /* ";" */);
 }
 
 void Parser::PrintStatement() {
-		Expect(12 /* "print" */);
-		Expect(13 /* "(" */);
+		Expect(14 /* "print" */);
+		Expect(15 /* "(" */);
 		Expr();
-		Expect(14 /* ")" */);
-		Expect(10 /* ";" */);
+		Expect(16 /* ")" */);
+		Expect(12 /* ";" */);
 }
 
 void Parser::WhileStatement() {
-		Expect(15 /* "WHILE" */);
+		Expect(17 /* "WHILE" */);
 		Condition();
-		Expect(16 /* "DO" */);
+		Expect(18 /* "DO" */);
 		Statements();
 		Expect(5 /* "END" */);
 }
 
 void Parser::IfStatement() {
-		Expect(17 /* "IF" */);
+		Expect(19 /* "IF" */);
 		Condition();
-		Expect(18 /* "THEN" */);
+		Expect(20 /* "THEN" */);
 		Statements();
-		if (la->kind == 19 /* "ELSE" */) {
+		if (la->kind == 21 /* "ELSE" */) {
 			Get();
 			Statements();
 		}
@@ -172,7 +176,7 @@ void Parser::IfStatement() {
 
 void Parser::Expr() {
 		Term();
-		while (la->kind == 26 /* "+" */ || la->kind == 27 /* "-" */) {
+		while (la->kind == 28 /* "+" */ || la->kind == 29 /* "-" */) {
 			AddOp();
 			Term();
 		}
@@ -186,72 +190,67 @@ void Parser::Condition() {
 
 void Parser::Term() {
 		Factor();
-		while (la->kind == 28 /* "*" */ || la->kind == 29 /* "/" */) {
+		while (la->kind == 30 /* "*" */ || la->kind == 31 /* "/" */) {
 			MulOp();
 			Factor();
 		}
 }
 
 void Parser::AddOp() {
-		if (la->kind == 26 /* "+" */) {
+		if (la->kind == 28 /* "+" */) {
 			Get();
-		} else if (la->kind == 27 /* "-" */) {
+		} else if (la->kind == 29 /* "-" */) {
 			Get();
-		} else SynErr(32);
+		} else SynErr(35);
 }
 
 void Parser::Factor() {
 		if (la->kind == _ident) {
 			Get();
-			std::string varName = coco_string_create_char(t->val);
-			if (!mSymTab.Find(varName))
-			{
-				SemErr(L"Variable nicht deklariert!");
-			}
 		} else if (la->kind == _number) {
 			Get();
-		} else if (la->kind == 13 /* "(" */) {
+		} else if (la->kind == 15 /* "(" */) {
 			Get();
 			Expr();
-			Expect(14 /* ")" */);
-		} else SynErr(33);
+			Expect(16 /* ")" */);
+		} else SynErr(36);
 }
 
 void Parser::MulOp() {
-		if (la->kind == 28 /* "*" */) {
+		if (la->kind == 30 /* "*" */) {
 			Get();
-		} else if (la->kind == 29 /* "/" */) {
+		} else if (la->kind == 31 /* "/" */) {
 			Get();
-		} else SynErr(34);
+		} else SynErr(37);
 }
 
 void Parser::Relop() {
 		switch (la->kind) {
-		case 20 /* "=" */: {
+		case 22 /* "=" */: {
 			Get();
 			break;
 		}
-		case 21 /* "<=" */: {
+		case 23 /* "<=" */: {
 			Get();
 			break;
 		}
-		case 22 /* ">=" */: {
+		case 24 /* ">=" */: {
 			Get();
 			break;
 		}
-		case 23 /* "!=" */: {
+		case 25 /* "!=" */: {
 			Get();
 			break;
 		}
-		case 24 /* "<" */: {
+		case 26 /* "<" */: {
 			Get();
 			break;
 		}
-		case 25 /* ">" */: {
+		case 27 /* ">" */: {
 			Get();
 			break;
 		}
-		default: SynErr(35); break;
+		default: SynErr(38); break;
 		}
 }
 
@@ -355,8 +354,8 @@ void Parser::Parse() {
 	Expect(0);
 }
 
-Parser::Parser(Scanner *scanner) : mSymTab(SymbolTable::GetInstance()) {
-	maxT = 30;
+Parser::Parser(Scanner *scanner) {
+	maxT = 32;
 
 	ParserInitCaller<Parser>::CallInit(this);
 	dummyToken = NULL;
@@ -371,9 +370,9 @@ bool Parser::StartOf(int s) {
 	const bool T = true;
 	const bool x = false;
 
-	static bool set[2][32] = {
-		{T,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x},
-		{x,T,x,x, x,x,x,x, x,x,x,x, T,x,x,T, x,T,x,x, x,x,x,x, x,x,x,x, x,x,x,x}
+	static bool set[2][34] = {
+		{T,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x},
+		{x,T,x,x, x,x,x,x, x,x,x,x, x,x,T,x, x,T,x,T, x,x,x,x, x,x,x,x, x,x,x,x, x,x}
 	};
 
 
@@ -400,36 +399,39 @@ void Errors::SynErr(int line, int col, int n) {
 			case 3: s = coco_string_create(L"\"PROGRAM\" expected"); break;
 			case 4: s = coco_string_create(L"\"BEGIN\" expected"); break;
 			case 5: s = coco_string_create(L"\"END\" expected"); break;
-			case 6: s = coco_string_create(L"\"BEGIN_VAR\" expected"); break;
-			case 7: s = coco_string_create(L"\"END_VAR\" expected"); break;
-			case 8: s = coco_string_create(L"\":\" expected"); break;
-			case 9: s = coco_string_create(L"\"Integer\" expected"); break;
-			case 10: s = coco_string_create(L"\";\" expected"); break;
-			case 11: s = coco_string_create(L"\":=\" expected"); break;
-			case 12: s = coco_string_create(L"\"print\" expected"); break;
-			case 13: s = coco_string_create(L"\"(\" expected"); break;
-			case 14: s = coco_string_create(L"\")\" expected"); break;
-			case 15: s = coco_string_create(L"\"WHILE\" expected"); break;
-			case 16: s = coco_string_create(L"\"DO\" expected"); break;
-			case 17: s = coco_string_create(L"\"IF\" expected"); break;
-			case 18: s = coco_string_create(L"\"THEN\" expected"); break;
-			case 19: s = coco_string_create(L"\"ELSE\" expected"); break;
-			case 20: s = coco_string_create(L"\"=\" expected"); break;
-			case 21: s = coco_string_create(L"\"<=\" expected"); break;
-			case 22: s = coco_string_create(L"\">=\" expected"); break;
-			case 23: s = coco_string_create(L"\"!=\" expected"); break;
-			case 24: s = coco_string_create(L"\"<\" expected"); break;
-			case 25: s = coco_string_create(L"\">\" expected"); break;
-			case 26: s = coco_string_create(L"\"+\" expected"); break;
-			case 27: s = coco_string_create(L"\"-\" expected"); break;
-			case 28: s = coco_string_create(L"\"*\" expected"); break;
-			case 29: s = coco_string_create(L"\"/\" expected"); break;
-			case 30: s = coco_string_create(L"??? expected"); break;
-			case 31: s = coco_string_create(L"invalid Stat"); break;
-			case 32: s = coco_string_create(L"invalid AddOp"); break;
-			case 33: s = coco_string_create(L"invalid Factor"); break;
-			case 34: s = coco_string_create(L"invalid MulOp"); break;
-			case 35: s = coco_string_create(L"invalid Relop"); break;
+			case 6: s = coco_string_create(L"\"Integer\" expected"); break;
+			case 7: s = coco_string_create(L"\"Float\" expected"); break;
+			case 8: s = coco_string_create(L"\"Char\" expected"); break;
+			case 9: s = coco_string_create(L"\"BEGIN_VAR\" expected"); break;
+			case 10: s = coco_string_create(L"\"END_VAR\" expected"); break;
+			case 11: s = coco_string_create(L"\":\" expected"); break;
+			case 12: s = coco_string_create(L"\";\" expected"); break;
+			case 13: s = coco_string_create(L"\":=\" expected"); break;
+			case 14: s = coco_string_create(L"\"print\" expected"); break;
+			case 15: s = coco_string_create(L"\"(\" expected"); break;
+			case 16: s = coco_string_create(L"\")\" expected"); break;
+			case 17: s = coco_string_create(L"\"WHILE\" expected"); break;
+			case 18: s = coco_string_create(L"\"DO\" expected"); break;
+			case 19: s = coco_string_create(L"\"IF\" expected"); break;
+			case 20: s = coco_string_create(L"\"THEN\" expected"); break;
+			case 21: s = coco_string_create(L"\"ELSE\" expected"); break;
+			case 22: s = coco_string_create(L"\"=\" expected"); break;
+			case 23: s = coco_string_create(L"\"<=\" expected"); break;
+			case 24: s = coco_string_create(L"\">=\" expected"); break;
+			case 25: s = coco_string_create(L"\"!=\" expected"); break;
+			case 26: s = coco_string_create(L"\"<\" expected"); break;
+			case 27: s = coco_string_create(L"\">\" expected"); break;
+			case 28: s = coco_string_create(L"\"+\" expected"); break;
+			case 29: s = coco_string_create(L"\"-\" expected"); break;
+			case 30: s = coco_string_create(L"\"*\" expected"); break;
+			case 31: s = coco_string_create(L"\"/\" expected"); break;
+			case 32: s = coco_string_create(L"??? expected"); break;
+			case 33: s = coco_string_create(L"invalid Type"); break;
+			case 34: s = coco_string_create(L"invalid Stat"); break;
+			case 35: s = coco_string_create(L"invalid AddOp"); break;
+			case 36: s = coco_string_create(L"invalid Factor"); break;
+			case 37: s = coco_string_create(L"invalid MulOp"); break;
+			case 38: s = coco_string_create(L"invalid Relop"); break;
 
 		default:
 		{

@@ -20,13 +20,16 @@ namespace MIEC {
 
 	//=========================================================
 
-	#pragma once
+	//#pragma once
 	class TypeSymbol;
 
 	class Type
 	{
+	public:
+		Type(TypeSymbol* sym);
 		TypeSymbol* GetTypeSymbol() const;
 		virtual int GetSize() = 0;
+		virtual ~Type() = default;
 
 	private:
 		TypeSymbol* mTypeSymbol;
@@ -37,6 +40,7 @@ namespace MIEC {
 	class BaseType : public Type
 	{
 	public:
+		BaseType(TypeKind kind);
 		int GetSize() override;
 		TypeKind GetKind();
 
@@ -61,17 +65,17 @@ namespace MIEC {
 	};
 
 	////=========================================================
-	#pragma once
 	class VarSymbol;
 
 	class StructType : public Type {
 	public:	
 		struct Elem {
 			std::string name;
-			VarSymbol* VarSymbol;
+			VarSymbol* varSymbol;
 			int offset;
 		};
 
+		StructType(const std::string& name);
 		int GetSize() override;
 		std::string GetName();
 		void AddField(const std::string& name, VarSymbol* var);
@@ -88,6 +92,7 @@ namespace MIEC {
 	class ArrayType : public Type
 	{
 	public:
+		ArrayType(Type* elemType, int count);
 		int GetCount() const;
 		Type* GetElemType() const;
 		int GetSize() override;

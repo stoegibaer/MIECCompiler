@@ -3,10 +3,12 @@
 #if !defined(MIEC_COCO_PARSER_H__)
 #define MIEC_COCO_PARSER_H__
 
+#include "../Symbol.h"
+#include "../Type.h"
+#include "../SymbolTable.h"
 
 
 #include "Scanner.h"
-#include <SymbolTable.h>
 
 namespace MIEC {
 
@@ -36,8 +38,6 @@ private:
 	Token *dummyToken;
 	int errDist;
 	int minErrDist;
-	SymbolTable& mSymTab;
-	int mCurrOffset = 0;
 
 	void SynErr(int n);
 	void Get();
@@ -46,13 +46,18 @@ private:
 	void ExpectWeak(int n, int follow);
 	bool WeakSeparator(int n, int syFol, int repFol);
 
-
 public:
 	Scanner *scanner;
 	Errors  *errors;
 
 	Token *t;			// last recognized token
 	Token *la;			// lookahead token
+
+SymbolTable& symTab = SymbolTable::GetInstance();
+BaseType* floatType = new BaseType(TypeKind::eFloat);
+BaseType* intType = new BaseType(TypeKind::eInt);
+BaseType* charType = new BaseType(TypeKind::eChar);
+
 
 
 
@@ -63,6 +68,8 @@ public:
 	void MIEC();
 	void VarDecl();
 	void Statements();
+	void Type(Type*& type);
+	void Ident(std::string &name);
 	void VarDeclList();
 	void Stat();
 	void Assignment();

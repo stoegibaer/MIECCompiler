@@ -4,13 +4,19 @@
 #include <algorithm>
 
 namespace MIEC {
-
+	Type::Type(TypeSymbol* sym) : mTypeSymbol(sym)
+	{
+	}
 	TypeSymbol* Type::GetTypeSymbol() const
 	{
 		return mTypeSymbol;
 	}
 
 	//=========================================================
+
+	BaseType::BaseType(TypeKind kind) : Type(/*what the heck*/), mType(kind)
+	{
+	}
 
 	int BaseType::GetSize()
 	{
@@ -21,7 +27,6 @@ namespace MIEC {
 		case MIEC::eInt:
 			size = sizeof(int);
 			break;
-
 		case MIEC::eFloat:
 			size = sizeof(float);
 			break;
@@ -40,6 +45,10 @@ namespace MIEC {
 
 	////=========================================================
 
+	StringType::StringType(std::string const& value)
+	{
+	}
+
 	int StringType::GetSize()
 	{
 		mLength = mValue.size();
@@ -54,6 +63,10 @@ namespace MIEC {
 	//=========================================================
 
 
+
+	StructType::StructType(const std::string& name) : mName(name), mSize(0)
+	{
+	}
 
 	int StructType::GetSize()
 	{
@@ -81,6 +94,10 @@ namespace MIEC {
 	}
 
 	//=========================================================
+
+	ArrayType::ArrayType(Type* elemType, int count) : mElemType(elemType), mCount(count)
+	{
+	}
 
 	int ArrayType::GetCount() const
 	{

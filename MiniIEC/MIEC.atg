@@ -1,19 +1,30 @@
-/* MIEC.atg - Attributierte Grammatik für MiniIEC Compiler
- * Compiler Engineering, FH-OÖ Hagenberg
- * Phase 1: Scanner und Parser für Syntaxanalyse
- */
+#include "../Symbol.h"
+#include "../Type.h"
+#include "../SymbolTable.h"
+
 COMPILER MIEC
+
+SymbolTable& symTab = SymbolTable::GetInstance();
+BaseType* floatType = new BaseType(TypeKind::eFloat);
+BaseType* intType = new BaseType(TypeKind::eInt);
+BaseType* charType = new BaseType(TypeKind::eChar);
+
+
 CHARACTERS
   letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".
   digit  = "0123456789".
   cr     = '\r'.
   lf     = '\n'.
   tab    = '\t'.
+
 TOKENS
   ident  = letter {letter | digit | '_'}.
   number = digit {digit}.
-COMMENTS FROM "(*" TO "*)"
+
+COMMENTS FROM "(*" TO "*)" NESTED
+
 IGNORE cr + lf + tab
+
 PRODUCTIONS
 /*--------------------------------------------------------------------------*/
 MIEC
@@ -22,17 +33,34 @@ MIEC
   "BEGIN"
   Statements
   "END"
+  (. delete floatType; delete charType; delete intType; .)
 .
 /*--------------------------------------------------------------------------*/
-VarDecl
+Type<Type*& type>
+= "Integer" (. type = intType; .)
+| "Float"   (. type = floatType; .)
+| "Char"    (. type = charType; .)
+.
+/*--------------------------------------------------------------------------*/
+Ident<std::string &name>
+= ident
+(. char * nameChars = coco_string_create_char(t->val); 
+name = nameChars;
+coco_string_delete(nameChars); .)
+.
+
+/*--------------------------------------------------------------------------*/
+VarDecl (. std::string name; Symbol * type; .)
 = "BEGIN_VAR"
   VarDeclList
   "END_VAR"
 .
 /*--------------------------------------------------------------------------*/
 VarDeclList
-= ident ':' "Integer" ';'
-  { ident ':' "Integer" ';' }
+= Ident<name> ':' Type<type> ';'
+    (. if (!symTab.AddVar(name, type, 0)) errors->Exception(L"Variable mit Name schon deklariert"); .)
+  { Ident<name> ':' Type<type> ';'
+      (. if (!symTab.AddVar(name, type, 0)) errors->Exception(L"Variable mit Name schon deklariert"); .) }
 .
 /*--------------------------------------------------------------------------*/
 Statements
@@ -47,7 +75,12 @@ Stat
 .
 /*--------------------------------------------------------------------------*/
 Assignment
-= ident ":=" Expr ';'
+= (. std::string name; .) Ident<name>
+    (. Symbol* sym = symTab.Find(name);
+       if(!sym) errors->Exception(L"Variable nicht deklariert");
+       // optional: Typprüfung! if (sym->GetType() != ExprType) ...
+     .)
+  ":=" Expr ";"
 .
 /*--------------------------------------------------------------------------*/
 PrintStatement
