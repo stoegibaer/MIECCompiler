@@ -144,14 +144,14 @@ void Parser::Assignment() {
 		SemError(L"Variable nicht deklariert");
 		}
 		else if (dynamic_cast<VarSymbol*>(sym) == nullptr) {
-		SemError(L"Nur Variablen k�nnen zugewiesen werden");
+		SemError(L"Nur Variablen können zugewiesen werden");
 		}
 		
 		Expect(11 /* ":=" */);
 		Expr(exprType);
 		if (sym != nullptr && exprType != nullptr) {
 		if (!sym->GetType()->IsCompatible(exprType)) {
-		SemError(L"Typinkompatibilit�t bei Zuweisung");
+		SemError(L"Typinkompatibilität bei Zuweisung");
 		}
 		}
 		
@@ -159,13 +159,14 @@ void Parser::Assignment() {
 }
 
 void Parser::PrintStatement() {
+		Type * exprType = nullptr; 
 		int startExpr = 0; 
 		int endExpr = 0; 
 		std::wstring_convert<std::codecvt_utf8<wchar_t>> conv; 
 		Expect(12 /* "print" */);
 		Expect(13 /* "(" */);
 		startExpr = la->pos; 
-		Expr();
+		Expr(exprType);
 		endExpr = la->pos; 
 		Expect(14 /* ")" */);
 		Expect(10 /* ";" */);
@@ -203,7 +204,7 @@ void Parser::Expr(Type * &type) {
 			Term(termType);
 			if (type != nullptr && termType != nullptr) {
 			if (!type->IsCompatible(termType)) {
-			SemError(L"Typinkompatibilit�t in Ausdruck");
+			SemError(L"Typinkompatibilität in Ausdruck");
 			}
 			}
 			
@@ -217,7 +218,7 @@ void Parser::Condition(Type * &leftType, Type*& rightType) {
 		Expr(rightType);
 		if (leftType != nullptr && rightType != nullptr) {
 		if (!leftType->IsCompatible(rightType)) {
-		SemError(L"Typinkompatibilit�t in Bedingung");
+		SemError(L"Typinkompatibilität in Bedingung");
 		}
 		}
 		
@@ -232,7 +233,7 @@ void Parser::Term(Type*& type) {
 			Factor(factorType);
 			if (type != nullptr && factorType != nullptr) {
 			if (!type->IsCompatible(factorType)) {
-			SemError(L"Typinkompatibilit�t in Term");
+			SemError(L"Typinkompatibilität in Term");
 			}
 			}
 			

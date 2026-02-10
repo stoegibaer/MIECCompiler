@@ -1,20 +1,23 @@
 
-/* MIEC.atg - Attributierte Grammatik f�r MiniIEC Compiler
- * Compiler Engineering, FH-O� Hagenberg
+/* MIEC.atg - Attributierte Grammatik für MiniIEC Compiler
+ * Compiler Engineering, FH-OÖ Hagenberg
  * Phase 2: Symboltabelle und semantische Analyse
  */
- #include <iostream>
- #include <codecvt>
- #include <locale>
- #include "SymbolTable.h"
+
+#include <iostream>
+#include <codecvt>
+#include <locale>
+#include "SymbolTable.h"
+
+    COMPILER MIEC
 
     SymbolTable mSymTab;
 
- // Helper Methode fuer Fehlermeldungen
- void SemError(const wchar_t* msg) {
-     errors->Error(la->line, la->col, msg);
- }
-COMPILER MIEC
+// Helper method für Fehlermeldungen
+void SemError(const wchar_t* msg) {
+    errors->Error(la->line, la->col, msg);
+}
+
 CHARACTERS
 letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".
 digit = "0123456789".
@@ -100,13 +103,13 @@ if (sym == nullptr) {
     SemError(L"Variable nicht deklariert");
 }
 else if (dynamic_cast<VarSymbol*>(sym) == nullptr) {
-    SemError(L"Nur Variablen k�nnen zugewiesen werden");
+    SemError(L"Nur Variablen können zugewiesen werden");
 }
 .)
 ":="
 Expr<exprType>(. if (sym != nullptr && exprType != nullptr) {
     if (!sym->GetType()->IsCompatible(exprType)) {
-        SemError(L"Typinkompatibilit�t bei Zuweisung");
+        SemError(L"Typinkompatibilität bei Zuweisung");
     }
 }
 .)
@@ -114,7 +117,7 @@ Expr<exprType>(. if (sym != nullptr && exprType != nullptr) {
 .
 
 /*--------------------------------------------------------------------------*/
-PrintStatement
+PrintStatement(.Type * exprType = nullptr; .)
 = 
 (. int startExpr = 0; .)
 (. int endExpr = 0; .)
@@ -122,12 +125,13 @@ PrintStatement
 "print" 
 '(' 
 (. startExpr = la->pos; .)
-Expr 
+Expr <exprType>
 (. endExpr = la->pos; .)
 ')' 
 ';'
 (. std::cout << conv.to_bytes(scanner->buffer->GetString(startExpr, endExpr)) << std::endl; .)
 .
+
 /*--------------------------------------------------------------------------*/
 WhileStatement(.Type * left = nullptr; Type * right = nullptr; .)
 = "WHILE"
@@ -154,7 +158,7 @@ Expr<Type * &type>(.Type * termType = nullptr; .)
     AddOp
         Term<termType>(. if (type != nullptr && termType != nullptr) {
         if (!type->IsCompatible(termType)) {
-            SemError(L"Typinkompatibilit�t in Ausdruck");
+            SemError(L"Typinkompatibilität in Ausdruck");
         }
     }
     .)
@@ -168,7 +172,7 @@ Term<Type*& type>(.Type * factorType = nullptr; .)
     MulOp
         Factor<factorType>(. if (type != nullptr && factorType != nullptr) {
         if (!type->IsCompatible(factorType)) {
-            SemError(L"Typinkompatibilit�t in Term");
+            SemError(L"Typinkompatibilität in Term");
         }
     }
     .)
@@ -198,7 +202,7 @@ Condition<Type * &leftType, Type*& rightType>(.leftType = nullptr; rightType = n
 Relop
 Expr<rightType>(. if (leftType != nullptr && rightType != nullptr) {
     if (!leftType->IsCompatible(rightType)) {
-        SemError(L"Typinkompatibilit�t in Bedingung");
+        SemError(L"Typinkompatibilität in Bedingung");
     }
 }
 .)

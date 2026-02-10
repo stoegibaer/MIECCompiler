@@ -4,10 +4,10 @@
 #define MIEC_COCO_PARSER_H__
 
 #include <iostream>
-
 #include <codecvt>
 #include <locale>
 #include "SymbolTable.h"
+
 
 #include "Scanner.h"
 
@@ -56,7 +56,7 @@ public:
 
 SymbolTable mSymTab;
 
-// Helper method f�r Fehlermeldungen
+// Helper method für Fehlermeldungen
 void SemError(const wchar_t* msg) {
     errors->Error(la->line, la->col, msg);
 }
