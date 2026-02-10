@@ -7,6 +7,11 @@ namespace MIEC {
 	{
 	}
 
+	DACStatement::DACStatement(Operand const& firstOp, TOpKind const op) :
+		mFirstOperand(firstOp), mSecondOperand(firstOp), mOpperation(op)
+	{
+	}
+
 	Operand DACStatement::GetFirst()
 	{
 		return mFirstOperand;

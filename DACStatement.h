@@ -36,6 +36,7 @@ namespace MIEC {
 	{
 	public:
 		DACStatement(Operand const& firstOp, Operand const& secondOp, TOpKind const op);
+		DACStatement(Operand const& firstOp, TOpKind const op);
 		virtual ~DACStatement() = default;
 		Operand GetFirst();
 		Operand GetSecond();
