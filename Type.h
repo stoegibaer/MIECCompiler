@@ -8,8 +8,6 @@
 #include <memory>
 #include <stdexcept>
 
-#include "Symbol.h"
-
 namespace MIEC {
 	class TypeSymbol;
 
@@ -23,6 +21,7 @@ namespace MIEC {
 
 	class Type
 	{
+	public:
 		//virtual ~Type() = default;
 		virtual int GetSize() = 0;
 		TypeSymbol* GetTypeSymbol();

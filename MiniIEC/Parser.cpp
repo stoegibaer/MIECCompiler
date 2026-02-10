@@ -123,6 +123,7 @@ void Parser::PrintStatement() {
 		Expr();
 		Expect(14 /* ")" */);
 		Expect(10 /* ";" */);
+		std::cout(Expr); 
 }
 
 void Parser::WhileStatement() {

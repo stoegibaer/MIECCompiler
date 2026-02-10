@@ -2,6 +2,7 @@
  * Compiler Engineering, FH-OÖ Hagenberg
  * Phase 1: Scanner und Parser für Syntaxanalyse
  */
+ #include <iostream>
 COMPILER MIEC
 CHARACTERS
   letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".
@@ -52,6 +53,7 @@ Assignment
 /*--------------------------------------------------------------------------*/
 PrintStatement
 = "print" '(' Expr ')' ';'
+(. std::cout(Expr); .)
 .
 /*--------------------------------------------------------------------------*/
 WhileStatement

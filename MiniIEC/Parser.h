@@ -3,6 +3,7 @@
 #if !defined(MIEC_COCO_PARSER_H__)
 #define MIEC_COCO_PARSER_H__
 
+#include <iostream>
 
 
 #include "Scanner.h"
