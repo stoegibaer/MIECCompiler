@@ -4,6 +4,8 @@
 #define MIEC_COCO_PARSER_H__
 
 #include <iostream>
+ #include <codecvt>
+ #include <locale>
 
 
 #include "Scanner.h"

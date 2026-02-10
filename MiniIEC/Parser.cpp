@@ -118,12 +118,17 @@ void Parser::Assignment() {
 }
 
 void Parser::PrintStatement() {
+		int startExpr = 0; 
+		int endExpr = 0; 
+		std::wstring_convert<std::codecvt_utf8<wchar_t>> conv; 
 		Expect(12 /* "print" */);
 		Expect(13 /* "(" */);
+		startExpr = la->pos; 
 		Expr();
+		endExpr = la->pos; 
 		Expect(14 /* ")" */);
 		Expect(10 /* ";" */);
-		std::cout(Expr); 
+		std::cout << conv.to_bytes(scanner->buffer->GetString(startExpr, endExpr)) << std::endl; 
 }
 
 void Parser::WhileStatement() {
