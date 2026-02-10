@@ -4,9 +4,10 @@
 #define MIEC_COCO_PARSER_H__
 
 #include <iostream>
- #include <codecvt>
- #include <locale>
 
+#include <codecvt>
+#include <locale>
+#include "SymbolTable.h"
 
 #include "Scanner.h"
 
@@ -53,6 +54,13 @@ public:
 	Token *t;			// last recognized token
 	Token *la;			// lookahead token
 
+SymbolTable mSymTab;
+
+// Helper method f�r Fehlermeldungen
+void SemError(const wchar_t* msg) {
+    errors->Error(la->line, la->col, msg);
+}
+
 
 
 	Parser(Scanner *scanner);
@@ -68,11 +76,11 @@ public:
 	void PrintStatement();
 	void WhileStatement();
 	void IfStatement();
-	void Expr();
-	void Condition();
-	void Term();
+	void Expr(Type * &type);
+	void Condition(Type * &leftType, Type*& rightType);
+	void Term(Type*& type);
 	void AddOp();
-	void Factor();
+	void Factor(Type*& type);
 	void MulOp();
 	void Relop();
 

@@ -1,54 +1,40 @@
 #include "Type.h"
-#include <sstream>
-#include <algorithm>
 
 namespace MIEC {
 
-	TypeSymbol* Type::GetTypeSymbol()
-	{
-		return mTypeSymbol;
-	}
+    TypeSymbol* Type::GetTypeSymbol() {
+        return mTypeSymbol;
+    }
 
-	BaseType::BaseType(TypeKind kind) : mType(kind)
-	{
-	}
+    void Type::SetTypeSymbol(TypeSymbol* typeSymbol) {
+        mTypeSymbol = typeSymbol;
+    }
 
-	int BaseType::GetSize()
-	{
-		switch (mType) {
-			case eInt:
-				return sizeof(int);      // typischerweise 4 Bytes
-			case eFloat:
-				return sizeof(float);    // typischerweise 4 Bytes
-			case eChar:
-				return sizeof(char);     // 1 Byte
-			default:
-				return 0;
-		}
-	}
+    bool Type::IsCompatible(Type* other) {
+        if (other == nullptr) return false;
+        return this->GetKind() == other->GetKind();
+    }
 
-	TypeKind BaseType::GetKind() const
-	{
-		return mType;
-	}
+    // BaseType
+    BaseType::BaseType(TypeKind kind) : mType(kind) {
+        mTypeSymbol = nullptr;
+    }
 
-	int StringType::GetSize()
-	{
-		return mLength * sizeof(char);
-	}
+    int BaseType::GetSize() {
+        switch (mType) {
+        case eInt:
+            return sizeof(int);      // typischerweise 4 Bytes
+        case eFloat:
+            return sizeof(float);    // typischerweise 4 Bytes
+        case eChar:
+            return sizeof(char);     // 1 Byte
+        default:
+            return 0;
+        }
+    }
 
-	std::string StringType::GetStringVal()
-	{
-		return mValue;
-	}
-
-	StructType::StructType(int size) : mVal(size)
-	{
-	}
-
-	int StructType::GetSize()
-	{
-		return mVal;
-	}
+    TypeKind BaseType::GetKind() const {
+        return mType;
+    }
 
 } // namespace MIEC
