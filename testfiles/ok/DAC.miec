@@ -1,0 +1,96 @@
+PROGRAM ComprehensiveTest
+(* Umfassender Test für alle DAC-Features *)
+BEGIN_VAR
+    a: Integer;
+    b: Integer;
+    c: Integer;
+    result: Integer;
+    x: Integer;
+    y: Integer;
+    temp: Integer;
+END_VAR
+BEGIN
+    (* Test 1: Einfache Zuweisungen *)
+    a := 10;
+    b := 20;
+    c := 30;
+    
+    (* Test 2: Arithmetische Ausdrücke *)
+    result := a + b;
+    result := a - b;
+    result := a * b;
+    result := a / b;
+    
+    (* Test 3: Komplexe Ausdrücke mit Priorität *)
+    result := a + b * c;
+    result := (a + b) * c;
+    result := a * b + c * a;
+    
+    (* Test 4: Print-Statements *)
+    print(result);
+    print(a);
+    
+    (* Test 5: If-Statement ohne Else *)
+    IF a < b THEN
+        result := a;
+    END
+    
+    (* Test 6: If-Statement mit Else *)
+    IF x > y THEN
+        temp := x;
+    ELSE
+        temp := y;
+    END
+    
+    (* Test 7: Verschiedene Vergleichsoperatoren *)
+    IF a = b THEN
+        result := 1;
+    END
+    
+    IF a != b THEN
+        result := 2;
+    END
+    
+    IF a <= b THEN
+        result := 3;
+    END
+    
+    IF a >= b THEN
+        result := 4;
+    END
+    
+    (* Test 8: While-Schleife *)
+    WHILE a < 100 DO
+        a := a + 1;
+    END
+    
+    (* Test 9: While mit komplexem Body *)
+    WHILE x <= y DO
+        x := x + 1;
+        result := result + x;
+        print(result);
+    END
+    
+    (* Test 10: Verschachtelte If-Statements *)
+    IF a > b THEN
+        IF c > a THEN
+            result := c;
+        ELSE
+            result := a;
+        END
+    ELSE
+        result := b;
+    END
+    
+    (* Test 11: If in While *)
+    WHILE a > 0 DO
+        IF a > 50 THEN
+            a := a - 10;
+        ELSE
+            a := a - 1;
+        END
+    END
+    
+    (* Test 12: Finale Ausgabe *)
+    print(result);
+END
