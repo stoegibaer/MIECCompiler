@@ -7,6 +7,7 @@
 #include <codecvt>
 #include <locale>
 #include "SymbolTable.h"
+#include "DACGenerator.h"
 
 
 #include "Scanner.h"
@@ -55,6 +56,7 @@ public:
 	Token *la;			// lookahead token
 
 SymbolTable mSymTab;
+    DACGenerator mDACGen;
 
 // Helper method für Fehlermeldungen
 void SemError(const wchar_t* msg) {
@@ -76,13 +78,13 @@ void SemError(const wchar_t* msg) {
 	void PrintStatement();
 	void WhileStatement();
 	void IfStatement();
-	void Expr(Type * &type);
-	void Condition(Type * &leftType, Type*& rightType);
-	void Term(Type*& type);
-	void AddOp();
-	void Factor(Type*& type);
-	void MulOp();
-	void Relop();
+	void Expr(Type * &type, Operand &result);
+	void Condition(Type * &leftType, Type*& rightType, Operand &leftResult, Operand &rightResult, OpKind &compareOp);
+	void Term(Type*& type, Operand &result);
+	void AddOp(OpKind &op);
+	void Factor(Type*& type, Operand &result);
+	void MulOp(OpKind &op);
+	void Relop(OpKind &op);
 
 	void Parse();
 

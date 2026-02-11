@@ -1,17 +1,18 @@
-
 /* MIEC.atg - Attributierte Grammatik für MiniIEC Compiler
  * Compiler Engineering, FH-OÖ Hagenberg
- * Phase 2: Symboltabelle und semantische Analyse
+ * Phase 3: Zwischencodeerzeugung (Three-Address Code)
  */
 
 #include <iostream>
 #include <codecvt>
 #include <locale>
 #include "SymbolTable.h"
+#include "DACGenerator.h"
 
-    COMPILER MIEC
+COMPILER MIEC
 
     SymbolTable mSymTab;
+    DACGenerator mDACGen;
 
 // Helper method für Fehlermeldungen
 void SemError(const wchar_t* msg) {
@@ -37,47 +38,49 @@ PRODUCTIONS
 /*--------------------------------------------------------------------------*/
 MIEC
 = "PROGRAM" ident(.mSymTab.ResetOffset(); .)
-[VarDecl]
-"BEGIN"
-Statements
-"END"
+  [VarDecl]
+  "BEGIN"
+  Statements
+  "END"
+  (. mDACGen.AddExit(); .)         // Add EXIT at end of program
+  (. mDACGen.Print(std::cout); .)  // Print DAC for debugging
 .
 
 /*--------------------------------------------------------------------------*/
 VarDecl
 = "BEGIN_VAR"
-VarDeclList
-"END_VAR"
+  VarDeclList
+  "END_VAR"
 .
 
 /*--------------------------------------------------------------------------*/
 VarDeclList
 = (.std::wstring name;
-Type * type = nullptr; .)
-ident(.name = t->val; .)
-':'
-"Integer"                                  (.type = mSymTab.GetIntType(); .)
-';'                                        (. int offset = mSymTab.GetCurrentOffset();
-if (!mSymTab.AddVar(std::string(name.begin(), name.end()), type, offset)) {
-    SemError(L"Variable bereits deklariert");
-}
-else {
-    mSymTab.IncreaseOffset(type->GetSize());
-}
-.)
-{
+   Type * type = nullptr; .)
+  ident(.name = t->val; .)
+  ':'
+  "Integer"                         (.type = mSymTab.GetIntType(); .)
+  ';'                               (. int offset = mSymTab.GetCurrentOffset();
+                                       if (!mSymTab.AddVar(std::string(name.begin(), name.end()), type, offset)) {
+                                           SemError(L"Variable bereits deklariert");
+                                       }
+                                       else {
+                                           mSymTab.IncreaseOffset(type->GetSize());
+                                       }
+                                    .)
+  {
     ident(.name = t->val; .)
-        ':'
-        "Integer"                                (.type = mSymTab.GetIntType(); .)
-        ';'                                      (.offset = mSymTab.GetCurrentOffset();
-    if (!mSymTab.AddVar(std::string(name.begin(), name.end()), type, offset)) {
-        SemError(L"Variable bereits deklariert");
-    }
-    else {
-        mSymTab.IncreaseOffset(type->GetSize());
-    }
-    .)
-}
+    ':'
+    "Integer"                       (.type = mSymTab.GetIntType(); .)
+    ';'                             (.offset = mSymTab.GetCurrentOffset();
+                                     if (!mSymTab.AddVar(std::string(name.begin(), name.end()), type, offset)) {
+                                         SemError(L"Variable bereits deklariert");
+                                     }
+                                     else {
+                                         mSymTab.IncreaseOffset(type->GetSize());
+                                     }
+                                    .)
+  }
 .
 
 /*--------------------------------------------------------------------------*/
@@ -95,139 +98,208 @@ Stat
 
 /*--------------------------------------------------------------------------*/
 Assignment(.std::wstring name;
-Type * exprType = nullptr; .)
+           Type * exprType = nullptr;
+           Operand exprResult; .)
 = ident(.name = t->val;
-std::string nameStr(name.begin(), name.end());
-Symbol * sym = mSymTab.Find(nameStr);
-if (sym == nullptr) {
-    SemError(L"Variable nicht deklariert");
-}
-else if (dynamic_cast<VarSymbol*>(sym) == nullptr) {
-    SemError(L"Nur Variablen können zugewiesen werden");
-}
-.)
-":="
-Expr<exprType>(. if (sym != nullptr && exprType != nullptr) {
-    if (!sym->GetType()->IsCompatible(exprType)) {
-        SemError(L"Typinkompatibilität bei Zuweisung");
-    }
-}
-.)
-';'
+        std::string nameStr(name.begin(), name.end());
+        Symbol * sym = mSymTab.Find(nameStr);
+        if (sym == nullptr) {
+            SemError(L"Variable nicht deklariert");
+        }
+        else if (dynamic_cast<VarSymbol*>(sym) == nullptr) {
+            SemError(L"Nur Variablen können zugewiesen werden");
+        }
+       .)
+  ":="
+  Expr<exprType, exprResult>        (. if (sym != nullptr && exprType != nullptr) {
+                                           if (!sym->GetType()->IsCompatible(exprType)) {
+                                               SemError(L"Typinkompatibilität bei Zuweisung");
+                                           }
+                                           else {
+                                               // Generate assignment: var = exprResult
+                                               Operand target(sym);
+                                               mDACGen.AddAssignment(target, exprResult);
+                                           }
+                                       }
+                                    .)
+  ';'
 .
 
 /*--------------------------------------------------------------------------*/
-PrintStatement(.Type * exprType = nullptr; .)
+PrintStatement(.Type * exprType = nullptr;
+               Operand exprResult; .)
 = 
-(. int startExpr = 0; .)
-(. int endExpr = 0; .)
-(. std::wstring_convert<std::codecvt_utf8<wchar_t>> conv; .)
-"print" 
-'(' 
-(. startExpr = la->pos; .)
-Expr <exprType>
-(. endExpr = la->pos; .)
-')' 
-';'
-(. std::cout << conv.to_bytes(scanner->buffer->GetString(startExpr, endExpr)) << std::endl; .)
+  "print" 
+  '(' 
+  Expr <exprType, exprResult>       (. if (exprType != nullptr) {
+                                           // Generate print statement
+                                           mDACGen.AddPrint(exprResult);
+                                       }
+                                    .)
+  ')' 
+  ';'
 .
 
 /*--------------------------------------------------------------------------*/
-WhileStatement(.Type * left = nullptr; Type * right = nullptr; .)
-= "WHILE"
-Condition < left, right>
-"DO"
-Statements
-"END"
+WhileStatement(.Type * left = nullptr; 
+               Type * right = nullptr;
+               Operand leftResult;
+               Operand rightResult;
+               OpKind compareOp;
+               int startLabel = 0;
+               int endLabel = 0; .)
+= "WHILE"                           (. startLabel = mDACGen.CreateLabel();
+                                       endLabel = mDACGen.CreateLabel();
+                                       mDACGen.MarkLabel(startLabel); .)
+  Condition<left, right, leftResult, rightResult, compareOp>
+                                    (. if (left != nullptr && right != nullptr) {
+                                           // Generate conditional jump
+                                           mDACGen.AddConditionalJump(compareOp, leftResult, rightResult, endLabel);
+                                       }
+                                    .)
+  "DO"
+  Statements
+  "END"                             (. // Jump back to start
+                                       mDACGen.AddJump(startLabel);
+                                       // Mark end label
+                                       mDACGen.MarkLabel(endLabel); .)
 .
 
 /*--------------------------------------------------------------------------*/
-IfStatement(.Type * left = nullptr; Type * right = nullptr; .)
-= "IF"
-Condition < left, right>
-"THEN"
-Statements
-["ELSE" Statements]
-"END"
+IfStatement(.Type * left = nullptr; 
+            Type * right = nullptr;
+            Operand leftResult;
+            Operand rightResult;
+            OpKind compareOp;
+            int elseLabel = 0;
+            int endLabel = 0;
+            bool hasElse = false; .)
+= "IF"                              (. elseLabel = mDACGen.CreateLabel();
+                                       endLabel = mDACGen.CreateLabel(); .)
+  Condition<left, right, leftResult, rightResult, compareOp>
+                                    (. if (left != nullptr && right != nullptr) {
+                                           // Jump to else/end if condition false
+                                           mDACGen.AddConditionalJump(compareOp, leftResult, rightResult, elseLabel);
+                                       }
+                                    .)
+  "THEN"
+  Statements
+  [                                 (. hasElse = true;
+                                       // Jump over else part
+                                       mDACGen.AddJump(endLabel);
+                                       // Mark else label
+                                       mDACGen.MarkLabel(elseLabel); .)
+   "ELSE" 
+   Statements
+  ]
+  "END"                             (. if (hasElse) {
+                                           // Mark end label (after else)
+                                           mDACGen.MarkLabel(endLabel);
+                                       } else {
+                                           // No else: else label is end label
+                                           mDACGen.MarkLabel(elseLabel);
+                                       }
+                                    .)
 .
 
 /*--------------------------------------------------------------------------*/
-Expr<Type * &type>(.Type * termType = nullptr; .)
-= Term<termType>(.type = termType; .)
-{
-    AddOp
-        Term<termType>(. if (type != nullptr && termType != nullptr) {
-        if (!type->IsCompatible(termType)) {
-            SemError(L"Typinkompatibilität in Ausdruck");
-        }
-    }
-    .)
-}
+Expr<Type * &type, Operand &result>(.Type * termType = nullptr;
+                                     Operand termResult;
+                                     OpKind op; .)
+= Term<termType, termResult>        (.type = termType;
+                                      result = termResult; .)
+  {
+    AddOp<op>
+    Term<termType, termResult>      (. if (type != nullptr && termType != nullptr) {
+                                           if (!type->IsCompatible(termType)) {
+                                               SemError(L"Typinkompatibilität in Ausdruck");
+                                           }
+                                           else {
+                                               // Generate binary operation
+                                               result = mDACGen.AddBinaryOp(op, result, termResult);
+                                           }
+                                       }
+                                    .)
+  }
 .
 
 /*--------------------------------------------------------------------------*/
-Term<Type*& type>(.Type * factorType = nullptr; .)
-= Factor<factorType>(.type = factorType; .)
-{
-    MulOp
-        Factor<factorType>(. if (type != nullptr && factorType != nullptr) {
-        if (!type->IsCompatible(factorType)) {
-            SemError(L"Typinkompatibilität in Term");
-        }
-    }
-    .)
-}
+Term<Type*& type, Operand &result>(.Type * factorType = nullptr;
+                                    Operand factorResult;
+                                    OpKind op; .)
+= Factor<factorType, factorResult>  (.type = factorType;
+                                      result = factorResult; .)
+  {
+    MulOp<op>
+    Factor<factorType, factorResult>(. if (type != nullptr && factorType != nullptr) {
+                                           if (!type->IsCompatible(factorType)) {
+                                               SemError(L"Typinkompatibilität in Term");
+                                           }
+                                           else {
+                                               // Generate binary operation
+                                               result = mDACGen.AddBinaryOp(op, result, factorResult);
+                                           }
+                                       }
+                                    .)
+  }
 .
 
 /*--------------------------------------------------------------------------*/
-Factor<Type*& type>(.std::wstring name;
-type = nullptr; .)
+Factor<Type*& type, Operand &result>(.std::wstring name;
+                                      type = nullptr; .)
 = ident(.name = t->val;
-std::string nameStr(name.begin(), name.end());
-Symbol * sym = mSymTab.Find(nameStr);
-if (sym == nullptr) {
-    SemError(L"Identifier nicht deklariert");
-}
-else {
-    type = sym->GetType();
-}
-.)
-| number(.type = mSymTab.GetIntType(); .)
-| '(' Expr < type> ')'
+        std::string nameStr(name.begin(), name.end());
+        Symbol * sym = mSymTab.Find(nameStr);
+        if (sym == nullptr) {
+            SemError(L"Identifier nicht deklariert");
+        }
+        else {
+            type = sym->GetType();
+            result = Operand(sym);  // Create operand from symbol
+        }
+       .)
+| number(.type = mSymTab.GetIntType();
+         // Convert token to integer
+         std::wstring numStr = t->val;
+         int value = std::stoi(numStr);
+         result = Operand::MakeConstant(value); .)
+| '(' Expr < type, result> ')'
 .
 
 /*--------------------------------------------------------------------------*/
-Condition<Type * &leftType, Type*& rightType>(.leftType = nullptr; rightType = nullptr; .)
-= Expr<leftType>
-Relop
-Expr<rightType>(. if (leftType != nullptr && rightType != nullptr) {
-    if (!leftType->IsCompatible(rightType)) {
-        SemError(L"Typinkompatibilität in Bedingung");
-    }
-}
-.)
+Condition<Type * &leftType, Type*& rightType, Operand &leftResult, Operand &rightResult, OpKind &compareOp>
+         (.leftType = nullptr; 
+           rightType = nullptr; .)
+= Expr<leftType, leftResult>
+  Relop<compareOp>
+  Expr<rightType, rightResult>      (. if (leftType != nullptr && rightType != nullptr) {
+                                           if (!leftType->IsCompatible(rightType)) {
+                                               SemError(L"Typinkompatibilität in Bedingung");
+                                           }
+                                       }
+                                    .)
 .
 
 /*--------------------------------------------------------------------------*/
-Relop
-= '='
-| "<="
-| ">="
-| "!="
-| '<'
-| '>'
+Relop<OpKind &op>
+= '='                               (. op = OpKind::eIsEqual; .)
+| "<="                              (. op = OpKind::eIsLessEqual; .)
+| ">="                              (. op = OpKind::eIsGreaterEqual; .)
+| "!="                              (. op = OpKind::eIsNotEqual; .)
+| '<'                               (. op = OpKind::eIsLess; .)
+| '>'                               (. op = OpKind::eIsGreater; .)
 .
 
 /*--------------------------------------------------------------------------*/
-AddOp
-= '+'
-| '-'
+AddOp<OpKind &op>
+= '+'                               (. op = OpKind::eAdd; .)
+| '-'                               (. op = OpKind::eSubtract; .)
 .
 
 /*--------------------------------------------------------------------------*/
-MulOp
-= '*'
-| '/'
+MulOp<OpKind &op>
+= '*'                               (. op = OpKind::eMultiply; .)
+| '/'                               (. op = OpKind::eDivide; .)
 .
 
 END MIEC.

@@ -72,6 +72,8 @@ void Parser::MIEC() {
 		Expect(4 /* "BEGIN" */);
 		Statements();
 		Expect(5 /* "END" */);
+		mDACGen.AddExit(); 
+		mDACGen.Print(std::cout); 
 }
 
 void Parser::VarDecl() {
@@ -97,10 +99,10 @@ void Parser::VarDeclList() {
 		Expect(10 /* ";" */);
 		int offset = mSymTab.GetCurrentOffset();
 		if (!mSymTab.AddVar(std::string(name.begin(), name.end()), type, offset)) {
-		SemError(L"Variable bereits deklariert");
+		   SemError(L"Variable bereits deklariert");
 		}
 		else {
-		mSymTab.IncreaseOffset(type->GetSize());
+		   mSymTab.IncreaseOffset(type->GetSize());
 		}
 		
 		while (la->kind == _ident) {
@@ -112,10 +114,10 @@ void Parser::VarDeclList() {
 			Expect(10 /* ";" */);
 			offset = mSymTab.GetCurrentOffset();
 			if (!mSymTab.AddVar(std::string(name.begin(), name.end()), type, offset)) {
-			SemError(L"Variable bereits deklariert");
+			  SemError(L"Variable bereits deklariert");
 			}
 			else {
-			mSymTab.IncreaseOffset(type->GetSize());
+			  mSymTab.IncreaseOffset(type->GetSize());
 			}
 			
 		}
@@ -135,120 +137,187 @@ void Parser::Stat() {
 
 void Parser::Assignment() {
 		std::wstring name;
-		Type * exprType = nullptr; 
+		Type * exprType = nullptr;
+		Operand exprResult; 
 		Expect(_ident);
 		name = t->val;
 		std::string nameStr(name.begin(), name.end());
 		Symbol * sym = mSymTab.Find(nameStr);
 		if (sym == nullptr) {
-		SemError(L"Variable nicht deklariert");
+		  SemError(L"Variable nicht deklariert");
 		}
 		else if (dynamic_cast<VarSymbol*>(sym) == nullptr) {
-		SemError(L"Nur Variablen können zugewiesen werden");
+		  SemError(L"Nur Variablen können zugewiesen werden");
 		}
 		
 		Expect(11 /* ":=" */);
-		Expr(exprType);
+		Expr(exprType, exprResult);
 		if (sym != nullptr && exprType != nullptr) {
-		if (!sym->GetType()->IsCompatible(exprType)) {
-		SemError(L"Typinkompatibilität bei Zuweisung");
-		}
+		   if (!sym->GetType()->IsCompatible(exprType)) {
+		       SemError(L"Typinkompatibilität bei Zuweisung");
+		   }
+		   else {
+		       // Generate assignment: var = exprResult
+		       Operand target(sym);
+		       mDACGen.AddAssignment(target, exprResult);
+		   }
 		}
 		
 		Expect(10 /* ";" */);
 }
 
 void Parser::PrintStatement() {
-		Type * exprType = nullptr; 
-		int startExpr = 0; 
-		int endExpr = 0; 
-		std::wstring_convert<std::codecvt_utf8<wchar_t>> conv; 
+		Type * exprType = nullptr;
+		Operand exprResult; 
 		Expect(12 /* "print" */);
 		Expect(13 /* "(" */);
-		startExpr = la->pos; 
-		Expr(exprType);
-		endExpr = la->pos; 
+		Expr(exprType, exprResult);
+		if (exprType != nullptr) {
+		   // Generate print statement
+		   mDACGen.AddPrint(exprResult);
+		}
+		
 		Expect(14 /* ")" */);
 		Expect(10 /* ";" */);
-		std::cout << conv.to_bytes(scanner->buffer->GetString(startExpr, endExpr)) << std::endl; 
 }
 
 void Parser::WhileStatement() {
-		Type * left = nullptr; Type * right = nullptr; 
+		Type * left = nullptr; 
+		Type * right = nullptr;
+		Operand leftResult;
+		Operand rightResult;
+		OpKind compareOp;
+		int startLabel = 0;
+		int endLabel = 0; 
 		Expect(15 /* "WHILE" */);
-		Condition(left, right);
+		startLabel = mDACGen.CreateLabel();
+		endLabel = mDACGen.CreateLabel();
+		mDACGen.MarkLabel(startLabel); 
+		Condition(left, right, leftResult, rightResult, compareOp);
+		if (left != nullptr && right != nullptr) {
+		   // Generate conditional jump
+		   mDACGen.AddConditionalJump(compareOp, leftResult, rightResult, endLabel);
+		}
+		
 		Expect(16 /* "DO" */);
 		Statements();
 		Expect(5 /* "END" */);
+		mDACGen.AddJump(startLabel);
+		// Mark end label
+		mDACGen.MarkLabel(endLabel); 
 }
 
 void Parser::IfStatement() {
-		Type * left = nullptr; Type * right = nullptr; 
+		Type * left = nullptr; 
+		Type * right = nullptr;
+		Operand leftResult;
+		Operand rightResult;
+		OpKind compareOp;
+		int elseLabel = 0;
+		int endLabel = 0;
+		bool hasElse = false; 
 		Expect(17 /* "IF" */);
-		Condition(left, right);
+		elseLabel = mDACGen.CreateLabel();
+		endLabel = mDACGen.CreateLabel(); 
+		Condition(left, right, leftResult, rightResult, compareOp);
+		if (left != nullptr && right != nullptr) {
+		   // Jump to else/end if condition false
+		   mDACGen.AddConditionalJump(compareOp, leftResult, rightResult, elseLabel);
+		}
+		
 		Expect(18 /* "THEN" */);
 		Statements();
 		if (la->kind == 19 /* "ELSE" */) {
+			hasElse = true;
+			// Jump over else part
+			mDACGen.AddJump(endLabel);
+			// Mark else label
+			mDACGen.MarkLabel(elseLabel); 
 			Get();
 			Statements();
 		}
 		Expect(5 /* "END" */);
-}
-
-void Parser::Expr(Type * &type) {
-		Type * termType = nullptr; 
-		Term(termType);
-		type = termType; 
-		while (la->kind == 26 /* "+" */ || la->kind == 27 /* "-" */) {
-			AddOp();
-			Term(termType);
-			if (type != nullptr && termType != nullptr) {
-			if (!type->IsCompatible(termType)) {
-			SemError(L"Typinkompatibilität in Ausdruck");
-			}
-			}
-			
-		}
-}
-
-void Parser::Condition(Type * &leftType, Type*& rightType) {
-		leftType = nullptr; rightType = nullptr; 
-		Expr(leftType);
-		Relop();
-		Expr(rightType);
-		if (leftType != nullptr && rightType != nullptr) {
-		if (!leftType->IsCompatible(rightType)) {
-		SemError(L"Typinkompatibilität in Bedingung");
-		}
+		if (hasElse) {
+		   // Mark end label (after else)
+		   mDACGen.MarkLabel(endLabel);
+		} else {
+		   // No else: else label is end label
+		   mDACGen.MarkLabel(elseLabel);
 		}
 		
 }
 
-void Parser::Term(Type*& type) {
-		Type * factorType = nullptr; 
-		Factor(factorType);
-		type = factorType; 
-		while (la->kind == 28 /* "*" */ || la->kind == 29 /* "/" */) {
-			MulOp();
-			Factor(factorType);
-			if (type != nullptr && factorType != nullptr) {
-			if (!type->IsCompatible(factorType)) {
-			SemError(L"Typinkompatibilität in Term");
-			}
+void Parser::Expr(Type * &type, Operand &result) {
+		Type * termType = nullptr;
+		Operand termResult;
+		OpKind op; 
+		Term(termType, termResult);
+		type = termType;
+		result = termResult; 
+		while (la->kind == 26 /* "+" */ || la->kind == 27 /* "-" */) {
+			AddOp(op);
+			Term(termType, termResult);
+			if (type != nullptr && termType != nullptr) {
+			   if (!type->IsCompatible(termType)) {
+			       SemError(L"Typinkompatibilität in Ausdruck");
+			   }
+			   else {
+			       // Generate binary operation
+			       result = mDACGen.AddBinaryOp(op, result, termResult);
+			   }
 			}
 			
 		}
 }
 
-void Parser::AddOp() {
+void Parser::Condition(Type * &leftType, Type*& rightType, Operand &leftResult, Operand &rightResult, OpKind &compareOp) {
+		leftType = nullptr; 
+		rightType = nullptr; 
+		Expr(leftType, leftResult);
+		Relop(compareOp);
+		Expr(rightType, rightResult);
+		if (leftType != nullptr && rightType != nullptr) {
+		   if (!leftType->IsCompatible(rightType)) {
+		       SemError(L"Typinkompatibilität in Bedingung");
+		   }
+		}
+		
+}
+
+void Parser::Term(Type*& type, Operand &result) {
+		Type * factorType = nullptr;
+		Operand factorResult;
+		OpKind op; 
+		Factor(factorType, factorResult);
+		type = factorType;
+		result = factorResult; 
+		while (la->kind == 28 /* "*" */ || la->kind == 29 /* "/" */) {
+			MulOp(op);
+			Factor(factorType, factorResult);
+			if (type != nullptr && factorType != nullptr) {
+			   if (!type->IsCompatible(factorType)) {
+			       SemError(L"Typinkompatibilität in Term");
+			   }
+			   else {
+			       // Generate binary operation
+			       result = mDACGen.AddBinaryOp(op, result, factorResult);
+			   }
+			}
+			
+		}
+}
+
+void Parser::AddOp(OpKind &op) {
 		if (la->kind == 26 /* "+" */) {
 			Get();
+			op = OpKind::eAdd; 
 		} else if (la->kind == 27 /* "-" */) {
 			Get();
+			op = OpKind::eSubtract; 
 		} else SynErr(32);
 }
 
-void Parser::Factor(Type*& type) {
+void Parser::Factor(Type*& type, Operand &result) {
 		std::wstring name;
 		type = nullptr; 
 		if (la->kind == _ident) {
@@ -257,54 +326,67 @@ void Parser::Factor(Type*& type) {
 			std::string nameStr(name.begin(), name.end());
 			Symbol * sym = mSymTab.Find(nameStr);
 			if (sym == nullptr) {
-			SemError(L"Identifier nicht deklariert");
+			  SemError(L"Identifier nicht deklariert");
 			}
 			else {
-			type = sym->GetType();
+			  type = sym->GetType();
+			  result = Operand(sym);  // Create operand from symbol
 			}
 			
 		} else if (la->kind == _number) {
 			Get();
-			type = mSymTab.GetIntType(); 
+			type = mSymTab.GetIntType();
+			// Convert token to integer
+			std::wstring numStr = t->val;
+			int value = std::stoi(numStr);
+			result = Operand::MakeConstant(value); 
 		} else if (la->kind == 13 /* "(" */) {
 			Get();
-			Expr(type);
+			Expr(type, result);
 			Expect(14 /* ")" */);
 		} else SynErr(33);
 }
 
-void Parser::MulOp() {
+void Parser::MulOp(OpKind &op) {
 		if (la->kind == 28 /* "*" */) {
 			Get();
+			op = OpKind::eMultiply; 
 		} else if (la->kind == 29 /* "/" */) {
 			Get();
+			op = OpKind::eDivide; 
 		} else SynErr(34);
 }
 
-void Parser::Relop() {
+void Parser::Relop(OpKind &op) {
 		switch (la->kind) {
 		case 20 /* "=" */: {
 			Get();
+			op = OpKind::eIsEqual; 
 			break;
 		}
 		case 21 /* "<=" */: {
 			Get();
+			op = OpKind::eIsLessEqual; 
 			break;
 		}
 		case 22 /* ">=" */: {
 			Get();
+			op = OpKind::eIsGreaterEqual; 
 			break;
 		}
 		case 23 /* "!=" */: {
 			Get();
+			op = OpKind::eIsNotEqual; 
 			break;
 		}
 		case 24 /* "<" */: {
 			Get();
+			op = OpKind::eIsLess; 
 			break;
 		}
 		case 25 /* ">" */: {
 			Get();
+			op = OpKind::eIsGreater; 
 			break;
 		}
 		default: SynErr(35); break;
