@@ -1,0 +1,11 @@
+PROGRAM Test
+BEGIN_VAR
+   x : Integer;
+   x : Integer;
+   y : Integer;
+END_VAR
+BEGIN
+   x := 5;
+   z := 3;
+   print(y);
+END
