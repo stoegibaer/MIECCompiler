@@ -33,12 +33,6 @@
     <ClCompile Include="Type.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DACGenerator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DACStatement.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MiniIEC\Scanner.h">
@@ -54,12 +48,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Type.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DACGenerator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DACStatement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

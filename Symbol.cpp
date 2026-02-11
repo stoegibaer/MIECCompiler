@@ -1,4 +1,3 @@
-#include "Type.h" // -> avoids circular dependency
 #include "Symbol.h"
 
 namespace MIEC {
