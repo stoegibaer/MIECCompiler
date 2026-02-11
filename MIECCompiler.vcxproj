@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DACGenerator.cpp" />
+    <ClCompile Include="DACStatement.cpp" />
     <ClCompile Include="MiniIEC\main.cpp" />
     <ClCompile Include="MiniIEC\Parser.cpp" />
     <ClCompile Include="MiniIEC\Scanner.cpp" />
@@ -40,6 +42,8 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DACGenerator.h" />
+    <ClInclude Include="DACStatement.h" />
     <ClInclude Include="MiniIEC\Parser.h" />
     <ClInclude Include="MiniIEC\Scanner.h" />
     <ClInclude Include="Symbol.h" />

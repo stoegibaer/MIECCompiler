@@ -24,7 +24,7 @@ namespace MIEC {
         TypeSymbol* GetTypeSymbol();
         void SetTypeSymbol(TypeSymbol* typeSymbol);
 
-        // Typenkompatibilität prüfen
+        // Typenkompatibilitï¿½t prï¿½fen
         bool IsCompatible(Type* other);
 
     protected:
@@ -41,6 +41,10 @@ namespace MIEC {
         TypeKind mType;
     };
 
+	private:
+		Type* mElemType; // element type
+		int mCount;     
+	};
 } // namespace MIEC
 
 #endif
