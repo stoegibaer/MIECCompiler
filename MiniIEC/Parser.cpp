@@ -65,6 +65,7 @@ bool Parser::WeakSeparator(int n, int syFol, int repFol) {
 void Parser::MIEC() {
 		Expect(3 /* "PROGRAM" */);
 		Expect(_ident);
+		mSymTab.ResetOffset(); 
 		if (la->kind == 6 /* "BEGIN_VAR" */) {
 			VarDecl();
 		}
@@ -86,15 +87,37 @@ void Parser::Statements() {
 }
 
 void Parser::VarDeclList() {
+		std::wstring name;
+		Type * type = nullptr; 
 		Expect(_ident);
+		name = t->val; 
 		Expect(8 /* ":" */);
 		Expect(9 /* "Integer" */);
+		type = mSymTab.GetIntType(); 
 		Expect(10 /* ";" */);
+		int offset = mSymTab.GetCurrentOffset();
+		if (!mSymTab.AddVar(std::string(name.begin(), name.end()), type, offset)) {
+		SemError(L"Variable bereits deklariert");
+		}
+		else {
+		mSymTab.IncreaseOffset(type->GetSize());
+		}
+		
 		while (la->kind == _ident) {
 			Get();
+			name = t->val; 
 			Expect(8 /* ":" */);
 			Expect(9 /* "Integer" */);
+			type = mSymTab.GetIntType(); 
 			Expect(10 /* ";" */);
+			offset = mSymTab.GetCurrentOffset();
+			if (!mSymTab.AddVar(std::string(name.begin(), name.end()), type, offset)) {
+			SemError(L"Variable bereits deklariert");
+			}
+			else {
+			mSymTab.IncreaseOffset(type->GetSize());
+			}
+			
 		}
 }
 
@@ -111,32 +134,58 @@ void Parser::Stat() {
 }
 
 void Parser::Assignment() {
+		std::wstring name;
+		Type * exprType = nullptr; 
 		Expect(_ident);
+		name = t->val;
+		std::string nameStr(name.begin(), name.end());
+		Symbol * sym = mSymTab.Find(nameStr);
+		if (sym == nullptr) {
+		SemError(L"Variable nicht deklariert");
+		}
+		else if (dynamic_cast<VarSymbol*>(sym) == nullptr) {
+		SemError(L"Nur Variablen können zugewiesen werden");
+		}
+		
 		Expect(11 /* ":=" */);
-		Expr();
+		Expr(exprType);
+		if (sym != nullptr && exprType != nullptr) {
+		if (!sym->GetType()->IsCompatible(exprType)) {
+		SemError(L"Typinkompatibilität bei Zuweisung");
+		}
+		}
+		
 		Expect(10 /* ";" */);
 }
 
 void Parser::PrintStatement() {
+		Type * exprType = nullptr; 
+		int startExpr = 0; 
+		int endExpr = 0; 
+		std::wstring_convert<std::codecvt_utf8<wchar_t>> conv; 
 		Expect(12 /* "print" */);
 		Expect(13 /* "(" */);
-		Expr();
+		startExpr = la->pos; 
+		Expr(exprType);
+		endExpr = la->pos; 
 		Expect(14 /* ")" */);
 		Expect(10 /* ";" */);
-		std::cout(Expr); 
+		std::cout << conv.to_bytes(scanner->buffer->GetString(startExpr, endExpr)) << std::endl; 
 }
 
 void Parser::WhileStatement() {
+		Type * left = nullptr; Type * right = nullptr; 
 		Expect(15 /* "WHILE" */);
-		Condition();
+		Condition(left, right);
 		Expect(16 /* "DO" */);
 		Statements();
 		Expect(5 /* "END" */);
 }
 
 void Parser::IfStatement() {
+		Type * left = nullptr; Type * right = nullptr; 
 		Expect(17 /* "IF" */);
-		Condition();
+		Condition(left, right);
 		Expect(18 /* "THEN" */);
 		Statements();
 		if (la->kind == 19 /* "ELSE" */) {
@@ -146,25 +195,48 @@ void Parser::IfStatement() {
 		Expect(5 /* "END" */);
 }
 
-void Parser::Expr() {
-		Term();
+void Parser::Expr(Type * &type) {
+		Type * termType = nullptr; 
+		Term(termType);
+		type = termType; 
 		while (la->kind == 26 /* "+" */ || la->kind == 27 /* "-" */) {
 			AddOp();
-			Term();
+			Term(termType);
+			if (type != nullptr && termType != nullptr) {
+			if (!type->IsCompatible(termType)) {
+			SemError(L"Typinkompatibilität in Ausdruck");
+			}
+			}
+			
 		}
 }
 
-void Parser::Condition() {
-		Expr();
+void Parser::Condition(Type * &leftType, Type*& rightType) {
+		leftType = nullptr; rightType = nullptr; 
+		Expr(leftType);
 		Relop();
-		Expr();
+		Expr(rightType);
+		if (leftType != nullptr && rightType != nullptr) {
+		if (!leftType->IsCompatible(rightType)) {
+		SemError(L"Typinkompatibilität in Bedingung");
+		}
+		}
+		
 }
 
-void Parser::Term() {
-		Factor();
+void Parser::Term(Type*& type) {
+		Type * factorType = nullptr; 
+		Factor(factorType);
+		type = factorType; 
 		while (la->kind == 28 /* "*" */ || la->kind == 29 /* "/" */) {
 			MulOp();
-			Factor();
+			Factor(factorType);
+			if (type != nullptr && factorType != nullptr) {
+			if (!type->IsCompatible(factorType)) {
+			SemError(L"Typinkompatibilität in Term");
+			}
+			}
+			
 		}
 }
 
@@ -176,14 +248,27 @@ void Parser::AddOp() {
 		} else SynErr(32);
 }
 
-void Parser::Factor() {
+void Parser::Factor(Type*& type) {
+		std::wstring name;
+		type = nullptr; 
 		if (la->kind == _ident) {
 			Get();
+			name = t->val;
+			std::string nameStr(name.begin(), name.end());
+			Symbol * sym = mSymTab.Find(nameStr);
+			if (sym == nullptr) {
+			SemError(L"Identifier nicht deklariert");
+			}
+			else {
+			type = sym->GetType();
+			}
+			
 		} else if (la->kind == _number) {
 			Get();
+			type = mSymTab.GetIntType(); 
 		} else if (la->kind == 13 /* "(" */) {
 			Get();
-			Expr();
+			Expr(type);
 			Expect(14 /* ")" */);
 		} else SynErr(33);
 }

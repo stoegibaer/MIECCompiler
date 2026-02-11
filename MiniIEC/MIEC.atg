@@ -1,44 +1,90 @@
-/* MIEC.atg - Attributierte Grammatik f�r MiniIEC Compiler
- * Compiler Engineering, FH-O� Hagenberg
- * Phase 1: Scanner und Parser f�r Syntaxanalyse
+
+/* MIEC.atg - Attributierte Grammatik für MiniIEC Compiler
+ * Compiler Engineering, FH-OÖ Hagenberg
+ * Phase 2: Symboltabelle und semantische Analyse
  */
- #include <iostream>
-COMPILER MIEC
+
+#include <iostream>
+#include <codecvt>
+#include <locale>
+#include "SymbolTable.h"
+
+    COMPILER MIEC
+
+    SymbolTable mSymTab;
+
+// Helper method für Fehlermeldungen
+void SemError(const wchar_t* msg) {
+    errors->Error(la->line, la->col, msg);
+}
+
 CHARACTERS
-  letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".
-  digit  = "0123456789".
-  cr     = '\r'.
-  lf     = '\n'.
-  tab    = '\t'.
+letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".
+digit = "0123456789".
+cr = '\r'.
+lf = '\n'.
+tab = '\t'.
+
 TOKENS
-  ident  = letter {letter | digit | '_'}.
-  number = digit {digit}.
+ident = letter{ letter | digit | '_' }.
+number = digit{ digit }.
+
 COMMENTS FROM "(*" TO "*)"
 IGNORE cr + lf + tab
+
 PRODUCTIONS
+
 /*--------------------------------------------------------------------------*/
 MIEC
-= "PROGRAM" ident
-  [ VarDecl ]
-  "BEGIN"
-  Statements
-  "END"
+= "PROGRAM" ident(.mSymTab.ResetOffset(); .)
+[VarDecl]
+"BEGIN"
+Statements
+"END"
 .
+
 /*--------------------------------------------------------------------------*/
 VarDecl
 = "BEGIN_VAR"
-  VarDeclList
-  "END_VAR"
+VarDeclList
+"END_VAR"
 .
+
 /*--------------------------------------------------------------------------*/
 VarDeclList
-= ident ':' "Integer" ';'
-  { ident ':' "Integer" ';' }
+= (.std::wstring name;
+Type * type = nullptr; .)
+ident(.name = t->val; .)
+':'
+"Integer"                                  (.type = mSymTab.GetIntType(); .)
+';'                                        (. int offset = mSymTab.GetCurrentOffset();
+if (!mSymTab.AddVar(std::string(name.begin(), name.end()), type, offset)) {
+    SemError(L"Variable bereits deklariert");
+}
+else {
+    mSymTab.IncreaseOffset(type->GetSize());
+}
+.)
+{
+    ident(.name = t->val; .)
+        ':'
+        "Integer"                                (.type = mSymTab.GetIntType(); .)
+        ';'                                      (.offset = mSymTab.GetCurrentOffset();
+    if (!mSymTab.AddVar(std::string(name.begin(), name.end()), type, offset)) {
+        SemError(L"Variable bereits deklariert");
+    }
+    else {
+        mSymTab.IncreaseOffset(type->GetSize());
+    }
+    .)
+}
 .
+
 /*--------------------------------------------------------------------------*/
 Statements
 = { Stat }
 .
+
 /*--------------------------------------------------------------------------*/
 Stat
 = Assignment
@@ -46,46 +92,122 @@ Stat
 | WhileStatement
 | IfStatement
 .
+
 /*--------------------------------------------------------------------------*/
-Assignment
-= ident ":=" Expr ';'
+Assignment(.std::wstring name;
+Type * exprType = nullptr; .)
+= ident(.name = t->val;
+std::string nameStr(name.begin(), name.end());
+Symbol * sym = mSymTab.Find(nameStr);
+if (sym == nullptr) {
+    SemError(L"Variable nicht deklariert");
+}
+else if (dynamic_cast<VarSymbol*>(sym) == nullptr) {
+    SemError(L"Nur Variablen können zugewiesen werden");
+}
+.)
+":="
+Expr<exprType>(. if (sym != nullptr && exprType != nullptr) {
+    if (!sym->GetType()->IsCompatible(exprType)) {
+        SemError(L"Typinkompatibilität bei Zuweisung");
+    }
+}
+.)
+';'
 .
+
 /*--------------------------------------------------------------------------*/
-PrintStatement
-= "print" '(' Expr ')' ';'
-(. std::cout(Expr); .)
+PrintStatement(.Type * exprType = nullptr; .)
+= 
+(. int startExpr = 0; .)
+(. int endExpr = 0; .)
+(. std::wstring_convert<std::codecvt_utf8<wchar_t>> conv; .)
+"print" 
+'(' 
+(. startExpr = la->pos; .)
+Expr <exprType>
+(. endExpr = la->pos; .)
+')' 
+';'
+(. std::cout << conv.to_bytes(scanner->buffer->GetString(startExpr, endExpr)) << std::endl; .)
 .
+
 /*--------------------------------------------------------------------------*/
-WhileStatement
-= "WHILE" Condition "DO"
-  Statements
-  "END"
+WhileStatement(.Type * left = nullptr; Type * right = nullptr; .)
+= "WHILE"
+Condition < left, right>
+"DO"
+Statements
+"END"
 .
+
 /*--------------------------------------------------------------------------*/
-IfStatement
-= "IF" Condition "THEN"
-  Statements
-  [ "ELSE" Statements ]
-  "END"
+IfStatement(.Type * left = nullptr; Type * right = nullptr; .)
+= "IF"
+Condition < left, right>
+"THEN"
+Statements
+["ELSE" Statements]
+"END"
 .
+
 /*--------------------------------------------------------------------------*/
-Expr
-= Term { AddOp Term }
+Expr<Type * &type>(.Type * termType = nullptr; .)
+= Term<termType>(.type = termType; .)
+{
+    AddOp
+        Term<termType>(. if (type != nullptr && termType != nullptr) {
+        if (!type->IsCompatible(termType)) {
+            SemError(L"Typinkompatibilität in Ausdruck");
+        }
+    }
+    .)
+}
 .
+
 /*--------------------------------------------------------------------------*/
-Term
-= Factor { MulOp Factor }
+Term<Type*& type>(.Type * factorType = nullptr; .)
+= Factor<factorType>(.type = factorType; .)
+{
+    MulOp
+        Factor<factorType>(. if (type != nullptr && factorType != nullptr) {
+        if (!type->IsCompatible(factorType)) {
+            SemError(L"Typinkompatibilität in Term");
+        }
+    }
+    .)
+}
 .
+
 /*--------------------------------------------------------------------------*/
-Factor
-= ident
-| number
-| '(' Expr ')'
+Factor<Type*& type>(.std::wstring name;
+type = nullptr; .)
+= ident(.name = t->val;
+std::string nameStr(name.begin(), name.end());
+Symbol * sym = mSymTab.Find(nameStr);
+if (sym == nullptr) {
+    SemError(L"Identifier nicht deklariert");
+}
+else {
+    type = sym->GetType();
+}
+.)
+| number(.type = mSymTab.GetIntType(); .)
+| '(' Expr < type> ')'
 .
+
 /*--------------------------------------------------------------------------*/
-Condition
-= Expr Relop Expr
+Condition<Type * &leftType, Type*& rightType>(.leftType = nullptr; rightType = nullptr; .)
+= Expr<leftType>
+Relop
+Expr<rightType>(. if (leftType != nullptr && rightType != nullptr) {
+    if (!leftType->IsCompatible(rightType)) {
+        SemError(L"Typinkompatibilität in Bedingung");
+    }
+}
+.)
 .
+
 /*--------------------------------------------------------------------------*/
 Relop
 = '='
@@ -95,14 +217,17 @@ Relop
 | '<'
 | '>'
 .
+
 /*--------------------------------------------------------------------------*/
 AddOp
 = '+'
 | '-'
 .
+
 /*--------------------------------------------------------------------------*/
 MulOp
 = '*'
 | '/'
 .
+
 END MIEC.
