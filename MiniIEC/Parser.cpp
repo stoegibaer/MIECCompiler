@@ -63,8 +63,10 @@ bool Parser::WeakSeparator(int n, int syFol, int repFol) {
 }
 
 void Parser::MIEC() {
+		std::string programName; 
 		Expect(3 /* "PROGRAM" */);
 		Expect(_ident);
+		programName = std::string(t->val, t->val + wcslen(t->val));
 		mSymTab.ResetOffset(); 
 		if (la->kind == 6 /* "BEGIN_VAR" */) {
 			VarDecl();
@@ -73,7 +75,41 @@ void Parser::MIEC() {
 		Statements();
 		Expect(5 /* "END" */);
 		mDACGen.AddExit(); 
-		mDACGen.Print(std::cout); 
+		#ifdef DEBUG_DAC
+		std::cout << "\n=== DAC Output ===" << std::endl;
+		mDACGen.Print(std::cout);
+		std::cout << std::endl;
+		#endif
+		
+		try {
+		   // Erstelle Code-Generator
+		   CodeGenerator codeGen(mDACGen);
+		   
+		   // Öffne Output-Dateien
+		   std::string baseName = programName;
+		   std::ofstream iexFile(baseName + ".iex", std::ios::binary);
+		   std::ofstream disFile(baseName + ".dis");
+		   
+		   if (!iexFile.is_open()) {
+		       std::cerr << "Error: Could not open " << baseName << ".iex for writing" << std::endl;
+		   } else if (!disFile.is_open()) {
+		       std::cerr << "Error: Could not open " << baseName << ".dis for writing" << std::endl;
+		   } else {
+		       // Erzeuge Code
+		       codeGen.GenerateCode(iexFile, disFile);
+		       
+		       // Schließe Dateien
+		       iexFile.close();
+		       disFile.close();
+		       
+		       std::cout << "Code generation successful!" << std::endl;
+		       std::cout << "  Generated: " << baseName << ".iex" << std::endl;
+		       std::cout << "  Generated: " << baseName << ".dis" << std::endl;
+		   }
+		} catch (const std::exception& e) {
+		   std::cerr << "Code generation error: " << e.what() << std::endl;
+		}
+		
 }
 
 void Parser::VarDecl() {

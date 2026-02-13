@@ -19,11 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CodeGenerator.cpp" />
+    <ClCompile Include="CodeGenRISCV.cpp" />
     <ClCompile Include="DACGenerator.cpp" />
     <ClCompile Include="DACStatement.cpp" />
     <ClCompile Include="MiniIEC\main.cpp" />
     <ClCompile Include="MiniIEC\Parser.cpp" />
     <ClCompile Include="MiniIEC\Scanner.cpp" />
+    <ClCompile Include="RegisterAdmin.cpp" />
     <ClCompile Include="Symbol.cpp" />
     <ClCompile Include="SymbolTable.cpp" />
     <ClCompile Include="Type.cpp" />
@@ -42,10 +45,15 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CodeGen.h" />
+    <ClInclude Include="CodeGenerator.h" />
+    <ClInclude Include="CodeGenRISCV.h" />
     <ClInclude Include="DACGenerator.h" />
     <ClInclude Include="DACStatement.h" />
     <ClInclude Include="MiniIEC\Parser.h" />
     <ClInclude Include="MiniIEC\Scanner.h" />
+    <ClInclude Include="Object.h" />
+    <ClInclude Include="RegisterAdmin.h" />
     <ClInclude Include="Symbol.h" />
     <ClInclude Include="SymbolTable.h" />
     <ClInclude Include="Type.h" />

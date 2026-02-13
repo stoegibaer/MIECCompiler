@@ -4,10 +4,12 @@
  */
 
 #include <iostream>
+#include <fstream>
 #include <codecvt>
 #include <locale>
 #include "SymbolTable.h"
 #include "DACGenerator.h"
+#include "CodeGenerator.h"
 
 COMPILER MIEC
 
@@ -36,15 +38,57 @@ IGNORE cr + lf + tab
 PRODUCTIONS
 
 /*--------------------------------------------------------------------------*/
-MIEC
-= "PROGRAM" ident(.mSymTab.ResetOffset(); .)
+MIEC (.std::string programName; .)
+= "PROGRAM" ident     (.programName = std::string(t->val, t->val + wcslen(t->val));
+                        mSymTab.ResetOffset(); .)
   [VarDecl]
   "BEGIN"
   Statements
   "END"
   (. mDACGen.AddExit(); .)         // Add EXIT at end of program
-  (. mDACGen.Print(std::cout); .)  // Print DAC for debugging
+  
+  // Optional: DAC ausgeben (für Debugging)
+  (. 
+     #ifdef DEBUG_DAC
+     std::cout << "\n=== DAC Output ===" << std::endl;
+     mDACGen.Print(std::cout);
+     std::cout << std::endl;
+     #endif
+  .)
+  
+  // NEU: Code-Generierung
+  (. 
+     try {
+         // Erstelle Code-Generator
+         CodeGenerator codeGen(mDACGen);
+         
+         // Öffne Output-Dateien
+         std::string baseName = programName;
+         std::ofstream iexFile(baseName + ".iex", std::ios::binary);
+         std::ofstream disFile(baseName + ".dis");
+         
+         if (!iexFile.is_open()) {
+             std::cerr << "Error: Could not open " << baseName << ".iex for writing" << std::endl;
+         } else if (!disFile.is_open()) {
+             std::cerr << "Error: Could not open " << baseName << ".dis for writing" << std::endl;
+         } else {
+             // Erzeuge Code
+             codeGen.GenerateCode(iexFile, disFile);
+             
+             // Schließe Dateien
+             iexFile.close();
+             disFile.close();
+             
+             std::cout << "Code generation successful!" << std::endl;
+             std::cout << "  Generated: " << baseName << ".iex" << std::endl;
+             std::cout << "  Generated: " << baseName << ".dis" << std::endl;
+         }
+     } catch (const std::exception& e) {
+         std::cerr << "Code generation error: " << e.what() << std::endl;
+     }
+  .)
 .
+
 
 /*--------------------------------------------------------------------------*/
 VarDecl

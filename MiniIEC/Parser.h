@@ -4,10 +4,12 @@
 #define MIEC_COCO_PARSER_H__
 
 #include <iostream>
+#include <fstream>
 #include <codecvt>
 #include <locale>
 #include "SymbolTable.h"
 #include "DACGenerator.h"
+#include "CodeGenerator.h"
 
 
 #include "Scanner.h"
