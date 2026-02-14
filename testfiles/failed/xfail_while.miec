@@ -1,0 +1,11 @@
+PROGRAM xfail_WhileNoDo
+BEGIN_VAR
+   i : Integer;
+END_VAR
+BEGIN
+   i := 1;
+   WHILE i <= 5  (* ERROR: DO fehlt *)
+      i := i + 1;
+   END
+   print(i);
+END

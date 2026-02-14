@@ -1,0 +1,8 @@
+PROGRAM Test01_SimpleAssignment
+BEGIN_VAR
+   x : Integer;
+END_VAR
+BEGIN
+   x := 42;
+   print(x);
+END

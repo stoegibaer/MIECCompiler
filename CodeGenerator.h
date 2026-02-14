@@ -109,6 +109,13 @@ namespace MIEC {
          */
         WORD GetLabelAddress(int labelIndex) const;
 
+        /**
+         * @brief Calculate which temporary is created by a statement
+         * @param stmtIndex The statement index
+         * @return Temporary index (1, 2, 3, ...)
+         */
+        int CalculateTempIndexForStatement(int stmtIndex) const;
+
         // ==================== Member Variables ====================
 
         DACGenerator* mDacGen;                    // Reference to DAC generator
@@ -122,9 +129,6 @@ namespace MIEC {
         // Constants
         static constexpr WORD DATA_SEGMENT_BASE = 0x1000;   // Base address for data segment (4096)
         static constexpr BYTE BASE_POINTER_REG = 1;         // Register 1 = Base Pointer
-
-        // Temporary counter for creating unique temporaries
-        int mTempCounter;
     };
 
 } // namespace MIEC

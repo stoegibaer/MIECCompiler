@@ -5,7 +5,7 @@
 namespace MIEC {
 
     CodeGenerator::CodeGenerator(DACGenerator& dacGen)
-        : mDacGen(&dacGen), mCodeGen(nullptr), mRegAdmin(nullptr), mTempCounter(1) {
+        : mDacGen(&dacGen), mCodeGen(nullptr), mRegAdmin(nullptr) {
 
         // Create code generator with disassembly enabled
         mCodeGen = new CodeGenRISCV(true, false);  // disasm=true, printOnTerminal=false
@@ -203,8 +203,10 @@ namespace MIEC {
             mRegAdmin->FreeRegister(rightReg);
         }
 
-        // Assign result to a new temporary
-        Operand resultOp = Operand::MakeTemp(mTempCounter++);
+        // Assign result to the correct temporary
+        // Calculate which temporary this statement creates
+        int tempIndex = CalculateTempIndexForStatement(stmtIndex);
+        Operand resultOp = Operand::MakeTemp(tempIndex);
         mRegAdmin->AssignRegister(resultReg, resultOp);
     }
 
@@ -227,8 +229,9 @@ namespace MIEC {
             mRegAdmin->FreeRegister(rightReg);
         }
 
-        // Assign result to a new temporary
-        Operand resultOp = Operand::MakeTemp(mTempCounter++);
+        // Assign result to the correct temporary
+        int tempIndex = CalculateTempIndexForStatement(stmtIndex);
+        Operand resultOp = Operand::MakeTemp(tempIndex);
         mRegAdmin->AssignRegister(resultReg, resultOp);
     }
 
@@ -255,8 +258,9 @@ namespace MIEC {
             mRegAdmin->FreeRegister(rightReg);
         }
 
-        // Assign result to a new temporary
-        Operand resultOp = Operand::MakeTemp(mTempCounter++);
+        // Assign result to the correct temporary
+        int tempIndex = CalculateTempIndexForStatement(stmtIndex);
+        Operand resultOp = Operand::MakeTemp(tempIndex);
         mRegAdmin->AssignRegister(resultReg, resultOp);
     }
 
@@ -287,8 +291,9 @@ namespace MIEC {
             mRegAdmin->FreeRegister(rightReg);
         }
 
-        // Assign result to a new temporary
-        Operand resultOp = Operand::MakeTemp(mTempCounter++);
+        // Assign result to the correct temporary
+        int tempIndex = CalculateTempIndexForStatement(stmtIndex);
+        Operand resultOp = Operand::MakeTemp(tempIndex);
         mRegAdmin->AssignRegister(resultReg, resultOp);
     }
 
@@ -473,6 +478,23 @@ namespace MIEC {
             // Patch the jump instruction with the correct address
             mCodeGen->SetAddress(jumpPos, labelAddr);
         }
+    }
+
+    int CodeGenerator::CalculateTempIndexForStatement(int stmtIndex) const {
+        // Calculate which temporary is created by this statement
+        // by counting all previous binary operations (arithmetic + comparison)
+        int tempIndex = 0;
+        for (int i = 0; i <= stmtIndex; ++i) {
+            OpKind op = mDacGen->GetStatements()[i].GetOperation();
+            if (op == OpKind::eAdd || op == OpKind::eSubtract ||
+                op == OpKind::eMultiply || op == OpKind::eDivide ||
+                op == OpKind::eIsEqual || op == OpKind::eIsLessEqual ||
+                op == OpKind::eIsGreaterEqual || op == OpKind::eIsNotEqual ||
+                op == OpKind::eIsLess || op == OpKind::eIsGreater) {
+                tempIndex++;
+            }
+        }
+        return tempIndex;
     }
 
     WORD CodeGenerator::GetLabelAddress(int labelIndex) const {

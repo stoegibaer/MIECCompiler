@@ -1,0 +1,17 @@
+(* Test program with comments *)
+PROGRAM Test10_Comments
+BEGIN_VAR
+   x : Integer; (* This is x *)
+   y : Integer; (* This is y *)
+END_VAR
+BEGIN
+   (* Initialize variables *)
+   x := 5;
+   y := 10;
+   
+   (* Calculate sum *)
+   x := x + y; (* x = 15 *)
+   
+   (* Output result *)
+   print(x);
+END

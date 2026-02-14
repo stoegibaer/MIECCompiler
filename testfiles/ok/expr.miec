@@ -1,0 +1,14 @@
+PROGRAM Test06_ComplexExpr
+BEGIN_VAR
+   a : Integer;
+   b : Integer;
+   c : Integer;
+   result : Integer;
+END_VAR
+BEGIN
+   a := 5;
+   b := 3;
+   c := 2;
+   result := (a + b) * c - a / b;
+   print(result);
+END

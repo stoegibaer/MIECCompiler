@@ -1,0 +1,14 @@
+PROGRAM Test04_IfWithElse
+BEGIN_VAR
+   x : Integer;
+   result : Integer;
+END_VAR
+BEGIN
+   x := 3;
+   IF x >= 5 THEN
+      result := 1;
+   ELSE
+      result := 2;
+   END
+   print(result);
+END

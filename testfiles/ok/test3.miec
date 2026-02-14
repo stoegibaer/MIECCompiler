@@ -1,8 +1,0 @@
-PROGRAM Test3
-BEGIN_VAR
-	a: Integer;
-	b: Integer;
-END_VAR
-
-BEGIN
- 

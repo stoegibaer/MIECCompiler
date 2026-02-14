@@ -1,0 +1,9 @@
+PROGRAM xfail_UndeclaredVariable
+BEGIN_VAR
+   x : Integer;
+END_VAR
+BEGIN
+   x := 5;
+   y := 10;  (* ERROR: y ist nicht deklariert *)
+   print(x);
+END

@@ -1,0 +1,12 @@
+PROGRAM xfail_IfNoThen
+BEGIN_VAR
+   x : Integer;
+   y : Integer;
+END_VAR
+BEGIN
+   x := 10;
+   IF x > 5  (* ERROR: THEN fehlt *)
+      y := 100;
+   END
+   print(y);
+END

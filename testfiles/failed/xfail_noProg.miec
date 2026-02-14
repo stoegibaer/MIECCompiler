@@ -1,0 +1,9 @@
+(* ERROR: PROGRAM keyword fehlt *)
+TestProgram
+BEGIN_VAR
+   x : Integer;
+END_VAR
+BEGIN
+   x := 5;
+   print(x);
+END

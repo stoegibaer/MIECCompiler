@@ -1,0 +1,14 @@
+PROGRAM while
+BEGIN_VAR
+   i : Integer;
+   sum : Integer;
+END_VAR
+BEGIN
+   i := 1;
+   sum := 0;
+   WHILE i <= 5 DO
+      sum := sum + i;
+      i := i + 1;
+   END
+   print(sum);
+END

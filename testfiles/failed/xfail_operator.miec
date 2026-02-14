@@ -1,0 +1,11 @@
+PROGRAM xfail_InvalidOperator
+BEGIN_VAR
+   x : Integer;
+   y : Integer;
+END_VAR
+BEGIN
+   x := 5;
+   y := 10;
+   x := x % y;  (* ERROR: % operator existiert nicht *)
+   print(x);
+END

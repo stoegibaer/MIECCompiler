@@ -1,0 +1,9 @@
+PROGRAM xfail_UndeclaredInExpr
+BEGIN_VAR
+   x : Integer;
+END_VAR
+BEGIN
+   x := 5;
+   x := x + z;  (* ERROR: z ist nicht deklariert *)
+   print(x);
+END

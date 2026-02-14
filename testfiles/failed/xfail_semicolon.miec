@@ -1,0 +1,10 @@
+PROGRAM xfail_MissingSemicolon
+BEGIN_VAR
+   x : Integer;
+   y : Integer;
+END_VAR
+BEGIN
+   x := 5  (* ERROR: Semikolon fehlt *)
+   y := 10;
+   print(x);
+END

@@ -1,0 +1,13 @@
+PROGRAM Test03_IfNoElse
+BEGIN_VAR
+   x : Integer;
+   y : Integer;
+END_VAR
+BEGIN
+   x := 10;
+   y := 0;
+   IF x > 5 THEN
+      y := 100;
+   END
+   print(y);
+END

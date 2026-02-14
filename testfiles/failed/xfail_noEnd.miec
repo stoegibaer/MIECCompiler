@@ -1,0 +1,11 @@
+PROGRAM xfail_MissingEnd
+BEGIN_VAR
+   x : Integer;
+END_VAR
+BEGIN
+   x := 5;
+   IF x > 3 THEN
+      x := 10;
+   (* ERROR: END fehlt für IF *)
+   print(x);
+END

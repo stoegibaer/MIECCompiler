@@ -1,0 +1,43 @@
+PROGRAM Test07_AllComparisons
+BEGIN_VAR
+   x : Integer;
+   y : Integer;
+   result : Integer;
+END_VAR
+BEGIN
+   x := 10;
+   y := 10;
+   result := 0;
+   
+   (* Test equal *)
+   IF x = y THEN
+      result := result + 1;
+   END
+   
+   (* Test not equal *)
+   IF x != 5 THEN
+      result := result + 10;
+   END
+   
+   (* Test less than *)
+   IF x < 20 THEN
+      result := result + 100;
+   END
+   
+   (* Test greater than *)
+   IF x > 5 THEN
+      result := result + 1000;
+   END
+   
+   (* Test less or equal *)
+   IF x <= 10 THEN
+      result := result + 10000;
+   END
+   
+   (* Test greater or equal *)
+   IF x >= 10 THEN
+      result := result + 100000;
+   END
+   
+   print(result);
+END

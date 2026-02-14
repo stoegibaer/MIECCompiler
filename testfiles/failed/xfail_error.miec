@@ -1,4 +1,0 @@
-   PROGRAM Test
-   BEGIN
-   a := 3  (* fehlendes Semikolon *)
-   END

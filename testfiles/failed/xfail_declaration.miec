@@ -1,0 +1,10 @@
+PROGRAM xfail_DoubleDeclaration
+BEGIN_VAR
+   x : Integer;
+   y : Integer;
+   x : Integer;  (* ERROR: x bereits deklariert *)
+END_VAR
+BEGIN
+   x := 5;
+   print(x);
+END

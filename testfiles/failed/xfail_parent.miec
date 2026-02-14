@@ -1,0 +1,8 @@
+PROGRAM xfail_MissingParenthesis
+BEGIN_VAR
+   x : Integer;
+END_VAR
+BEGIN
+   x := 42;
+   print(x;  (* ERROR: schließende Klammer fehlt *)
+END

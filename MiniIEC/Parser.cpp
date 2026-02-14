@@ -108,6 +108,7 @@ void Parser::MIEC() {
 		   }
 		} catch (const std::exception& e) {
 		   std::cerr << "Code generation error: " << e.what() << std::endl;
+		   errors->count++;  // Count code generation errors!
 		}
 		
 }
