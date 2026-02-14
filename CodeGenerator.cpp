@@ -352,6 +352,7 @@ namespace MIEC {
 
         // Get a temporary register for the jump
         RegNr tmpReg = mRegAdmin->GetFreeRegister();
+        mCodeGen->LoadI(tmpReg, 0);  // Initialize register to avoid VM warning
 
         // Check if label is already resolved
         WORD labelAddr = GetLabelAddress(labelIndex);
@@ -386,6 +387,7 @@ namespace MIEC {
 
         // Get a temporary register
         RegNr tmpReg = mRegAdmin->GetFreeRegister();
+        mCodeGen->LoadI(tmpReg, 0);  // Initialize register to avoid VM warning
 
         WORD jumpPos = 0;
 

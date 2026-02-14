@@ -58,34 +58,37 @@ MIEC (.std::string programName; .)
   
   // NEU: Code-Generierung
   (. 
-     try {
-         // Erstelle Code-Generator
-         CodeGenerator codeGen(mDACGen);
-         
-         // Öffne Output-Dateien
-         std::string baseName = programName;
-         std::ofstream iexFile(baseName + ".iex", std::ios::binary);
-         std::ofstream disFile(baseName + ".dis");
-         
-         if (!iexFile.is_open()) {
-             std::cerr << "Error: Could not open " << baseName << ".iex for writing" << std::endl;
-         } else if (!disFile.is_open()) {
-             std::cerr << "Error: Could not open " << baseName << ".dis for writing" << std::endl;
-         } else {
-             // Erzeuge Code
-             codeGen.GenerateCode(iexFile, disFile);
+     // Nur Code generieren, wenn keine Parsing-Fehler aufgetreten sind
+     if (errors->count == 0) {
+         try {
+             // Erstelle Code-Generator
+             CodeGenerator codeGen(mDACGen);
              
-             // Schließe Dateien
-             iexFile.close();
-             disFile.close();
+             // Öffne Output-Dateien
+             std::string baseName = programName;
+             std::ofstream iexFile(baseName + ".iex", std::ios::binary);
+             std::ofstream disFile(baseName + ".dis");
              
-             std::cout << "Code generation successful!" << std::endl;
-             std::cout << "  Generated: " << baseName << ".iex" << std::endl;
-             std::cout << "  Generated: " << baseName << ".dis" << std::endl;
+             if (!iexFile.is_open()) {
+                 std::cerr << "Error: Could not open " << baseName << ".iex for writing" << std::endl;
+             } else if (!disFile.is_open()) {
+                 std::cerr << "Error: Could not open " << baseName << ".dis for writing" << std::endl;
+             } else {
+                 // Erzeuge Code
+                 codeGen.GenerateCode(iexFile, disFile);
+                 
+                 // Schließe Dateien
+                 iexFile.close();
+                 disFile.close();
+                 
+                 std::cout << "Code generation successful!" << std::endl;
+                 std::cout << "  Generated: " << baseName << ".iex" << std::endl;
+                 std::cout << "  Generated: " << baseName << ".dis" << std::endl;
+             }
+         } catch (const std::exception& e) {
+             std::cerr << "Code generation error: " << e.what() << std::endl;
+             errors->count++;  // Count code generation errors!
          }
-     } catch (const std::exception& e) {
-         std::cerr << "Code generation error: " << e.what() << std::endl;
-         errors->count++;  // Count code generation errors!
      }
   .)
 .

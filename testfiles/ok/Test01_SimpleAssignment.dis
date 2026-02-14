@@ -1,0 +1,11 @@
+lui r1,1
+addi r1,r1,0
+lui r2,0
+addi r2,r2,0
+sw r2,[r1]+0
+lui r2,0
+addi r2,r2,42
+sw r2,[r1]+0
+lw r3,[r1]+0
+pint r3
+sleep
