@@ -134,18 +134,6 @@ int main(int argc, char* argv[]) {
 		// Report schreiben
 		WriteReportEntry(inputFile, errorCount);
 
-		// Ausgabedatei erstellen (auch wenn Fehler aufgetreten sind)
-		FILE* outFile = fopen(outputFile, "w");
-		if (outFile) {
-			if (errorCount == 0) {
-				fprintf(outFile, "; MiniIEC Intermediate Code\n; Generated from: %s\n", inputFile);
-			}
-			fclose(outFile);
-		}
-		else {
-			printf("Warnung: Kann Ausgabedatei nicht erstellen: %s\n", outputFile);
-		}
-
 		// R�ckgabewert basierend auf Fehleranzahl
 		int returnCode = (errorCount > 0) ? 1 : 0;
 

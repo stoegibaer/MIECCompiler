@@ -120,7 +120,7 @@ namespace MIEC {
         std::vector<WORD> mLabelAddresses;                  // label_index -> code_address
 
         // Constants
-        static constexpr WORD DATA_SEGMENT_BASE = 0x10000;  // Base address for data segment
+        static constexpr WORD DATA_SEGMENT_BASE = 0x1000;   // Base address for data segment (4096)
         static constexpr BYTE BASE_POINTER_REG = 1;         // Register 1 = Base Pointer
 
         // Temporary counter for creating unique temporaries
