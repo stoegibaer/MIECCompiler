@@ -1,9 +1,9 @@
 /**
  * main.cpp - MIEC Compiler
- * Compiler Engineering, FH-O� Hagenberg
- * Phase 1: Scanner und Parser
+ * Compiler Engineering, FH-OÖ Hagenberg
+ * Phase 1: Scanner and Parser
  *
- * Verwendung:
+ * Usage:
  *   MIECCompiler.exe -in <file.miec> -out <file.iex>
  */
 #include <stdio.h>
@@ -13,57 +13,50 @@
 #include "Scanner.h"
 #include "Parser.h"
 #include <iostream>
-
 using namespace MIEC;
-
 /**
- * Extrahiert die Dateierweiterung aus einem Pfad
- * @param filename Der Dateipfad
- * @return Zeiger auf die Erweiterung oder NULL
+ * Extracts the file extension from a path
+ * @param filename The file path
+ * @return Pointer to the extension or NULL
  */
 const char* GetFileExtension(const char* filename) {
 	const char* ext = strrchr(filename, '.');
 	return ext ? ext : NULL;
 }
-
 /**
- * �berpr�ft, ob die Dateierweiterung korrekt ist
- * @param filename Der Dateipfad
- * @param expectedExt Die erwartete Erweiterung (z.B. ".miec")
- * @return true wenn Erweiterung korrekt ist
+ * Checks if the file extension is correct
+ * @param filename The file path
+ * @param expectedExt The expected extension (e.g. ".miec")
+ * @return true if extension is correct
  */
 bool HasCorrectExtension(const char* filename, const char* expectedExt) {
 	const char* ext = GetFileExtension(filename);
 	if (!ext) return false;
 	return strcmp(ext, expectedExt) == 0;
 }
-
 /**
- * Formatiert die aktuelle Zeit als String
- * @param buffer Der Puffer f�r das Ergebnis
- * @param bufsize Die Gr��e des Puffers
+ * Formats the current time as a string
+ * @param buffer The buffer for the result
+ * @param bufsize The size of the buffer
  */
 void GetCurrentTimeString(char* buffer, size_t bufsize) {
 	time_t now = time(NULL);
 	struct tm* timeinfo = localtime(&now);
 	strftime(buffer, bufsize, "%a %b %d %H:%M:%S %Y", timeinfo);
 }
-
 /**
- * Schreibt einen Eintrag in die Report-Datei
- * @param inputFile Der Eingabedateiname
- * @param errorCount Die Anzahl der Fehler
+ * Writes an entry to the report file
+ * @param inputFile The input file name
+ * @param errorCount The number of errors
  */
 void WriteReportEntry(const char* inputFile, int errorCount) {
 	FILE* reportFile = fopen("MIECCompiler.report", "a");
 	if (!reportFile) {
-		printf("Fehler: Kann MIECCompiler.report nicht �ffnen\n");
+		printf("Error: Cannot open MIECCompiler.report\n");
 		return;
 	}
-
 	char timeStr[100];
 	GetCurrentTimeString(timeStr, 100);
-
 	if (errorCount == 0) {
 		fprintf(reportFile, "%s => %s: OK\n", timeStr, inputFile);
 		std::cout << timeStr << " => " << inputFile << ": OK" << std::endl;
@@ -72,18 +65,15 @@ void WriteReportEntry(const char* inputFile, int errorCount) {
 		fprintf(reportFile, "%s => %s: FAILED: %d error(s) detected\n", timeStr, inputFile, errorCount);
 		std::cerr << timeStr << " => " << inputFile << ": FAILED: " << errorCount << " error(s) detected" << std::endl;
 	}
-
 	fclose(reportFile);
 }
-
 /**
- * Hauptprogramm
+ * Main program
  */
 int main(int argc, char* argv[]) {
 	char* inputFile = NULL;
 	char* outputFile = NULL;
-
-	// Kommandozeilenargumente parsen
+	// Parse command-line arguments
 	for (int i = 1; i < argc; i++) {
 		if (strcmp(argv[i], "-in") == 0 && i + 1 < argc) {
 			inputFile = argv[++i];
@@ -92,68 +82,55 @@ int main(int argc, char* argv[]) {
 			outputFile = argv[++i];
 		}
 	}
-
-	// �berpr�fe erforderliche Argumente
+	// Check required arguments
 	if (!inputFile || !outputFile) {
-		printf("Verwendung: MIECCompiler.exe -in <file.miec> -out <file.iex>\n");
+		printf("Usage: MIECCompiler.exe -in <file.miec> -out <file.iex>\n");
 		return 1;
 	}
-
-	// �berpr�fe Dateierweiterungen
+	// Check file extensions
 	if (!HasCorrectExtension(inputFile, ".miec")) {
-		printf("Fehler: Eingabedatei muss die Erweiterung .miec haben\n");
+		printf("Error: Input file must have the .miec extension\n");
 		return 1;
 	}
-
 	if (!HasCorrectExtension(outputFile, ".iex")) {
-		printf("Fehler: Ausgabedatei muss die Erweiterung .iex haben\n");
+		printf("Error: Output file must have the .iex extension\n");
 		return 1;
 	}
-
-	// Versuche die Eingabedatei zu �ffnen
+	// Try to open the input file
 	FILE* inFile = fopen(inputFile, "rb");
 	if (!inFile) {
-		printf("Fehler: Kann Eingabedatei nicht �ffnen: %s\n", inputFile);
+		printf("Error: Cannot open input file: %s\n", inputFile);
 		return 1;
 	}
-
-	// Scanner und Parser erstellen
+	// Create scanner and parser
 	Scanner* scanner = NULL;
 	Parser* parser = NULL;
-
 	try {
 		scanner = new Scanner(inFile);
 		parser = new Parser(scanner);
-
-		// Parser starten
+		// Start parser
 		parser->Parse();
-
-		// Fehleranzahl pr�fen
+		// Check error count
 		int errorCount = parser->errors->count;
-
-		// Report schreiben
+		// Write report
 		WriteReportEntry(inputFile, errorCount);
-
-		// R�ckgabewert basierend auf Fehleranzahl
+		// Return code based on error count
 		int returnCode = (errorCount > 0) ? 1 : 0;
-
-		// Speicher freigeben
+		// Free memory
 		delete parser;
 		delete scanner;
 		fclose(inFile);
-
 		return returnCode;
-
 	}
 	catch (const char* e) {
-		printf("Fehler: %s\n", e);
+		printf("Error: %s\n", e);
 		if (inFile) fclose(inFile);
 		if (parser) delete parser;
 		if (scanner) delete scanner;
 		return 1;
 	}
 	catch (...) {
-		printf("Unbekannter Fehler w�hrend der Kompilation\n");
+		printf("Unknown error during compilation\n");
 		if (inFile) fclose(inFile);
 		if (parser) delete parser;
 		if (scanner) delete scanner;

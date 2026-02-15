@@ -1,6 +1,9 @@
-/* MIEC.atg - Attributierte Grammatik für MiniIEC Compiler
+/*
+ * MIEC.atg - Attributed Grammar for MiniIEC Compiler
  * Compiler Engineering, FH-OÖ Hagenberg
- * Phase 3: Zwischencodeerzeugung (Three-Address Code)
+ *
+ * This file defines the syntax and semantic rules for the MiniIEC language,
+ * including variable declarations, assignments, control flow, and expressions.
  */
 
 #include <iostream>
@@ -16,7 +19,7 @@ COMPILER MIEC
     SymbolTable mSymTab;
     DACGenerator mDACGen;
 
-// Helper method für Fehlermeldungen
+
 void SemError(const wchar_t* msg) {
     errors->Error(la->line, la->col, msg);
 }
@@ -45,9 +48,8 @@ MIEC (.std::string programName; .)
   "BEGIN"
   Statements
   "END"
-  (. mDACGen.AddExit(); .)         // Add EXIT at end of program
+  (. mDACGen.AddExit(); .)       
   
-  // Optional: DAC ausgeben (für Debugging)
   (. 
      #ifdef DEBUG_DAC
      std::cout << "\n=== DAC Output ===" << std::endl;
@@ -56,15 +58,11 @@ MIEC (.std::string programName; .)
      #endif
   .)
   
-  // NEU: Code-Generierung
   (. 
-     // Nur Code generieren, wenn keine Parsing-Fehler aufgetreten sind
      if (errors->count == 0) {
          try {
-             // Erstelle Code-Generator
              CodeGenerator codeGen(mDACGen);
              
-             // Öffne Output-Dateien
              std::string baseName = programName;
              std::ofstream iexFile(baseName + ".iex", std::ios::binary);
              std::ofstream disFile(baseName + ".dis");
@@ -74,10 +72,8 @@ MIEC (.std::string programName; .)
              } else if (!disFile.is_open()) {
                  std::cerr << "Error: Could not open " << baseName << ".dis for writing" << std::endl;
              } else {
-                 // Erzeuge Code
                  codeGen.GenerateCode(iexFile, disFile);
-                 
-                 // Schließe Dateien
+
                  iexFile.close();
                  disFile.close();
                  
@@ -87,7 +83,7 @@ MIEC (.std::string programName; .)
              }
          } catch (const std::exception& e) {
              std::cerr << "Code generation error: " << e.what() << std::endl;
-             errors->count++;  // Count code generation errors!
+             errors->count++;
          }
      }
   .)
@@ -110,7 +106,7 @@ VarDeclList
   "Integer"                         (.type = mSymTab.GetIntType(); .)
   ';'                               (. int offset = mSymTab.GetCurrentOffset();
                                        if (!mSymTab.AddVar(std::string(name.begin(), name.end()), type, offset)) {
-                                           SemError(L"Variable bereits deklariert");
+                                           SemError(L"Variable is already declared!");
                                        }
                                        else {
                                            mSymTab.IncreaseOffset(type->GetSize());
@@ -122,7 +118,7 @@ VarDeclList
     "Integer"                       (.type = mSymTab.GetIntType(); .)
     ';'                             (.offset = mSymTab.GetCurrentOffset();
                                      if (!mSymTab.AddVar(std::string(name.begin(), name.end()), type, offset)) {
-                                         SemError(L"Variable bereits deklariert");
+                                         SemError(L"Variable is already declared!");
                                      }
                                      else {
                                          mSymTab.IncreaseOffset(type->GetSize());
@@ -152,16 +148,16 @@ Assignment(.std::wstring name;
         std::string nameStr(name.begin(), name.end());
         Symbol * sym = mSymTab.Find(nameStr);
         if (sym == nullptr) {
-            SemError(L"Variable nicht deklariert");
+            SemError(L"Variable is not declared");
         }
         else if (dynamic_cast<VarSymbol*>(sym) == nullptr) {
-            SemError(L"Nur Variablen können zugewiesen werden");
+            SemError(L"Only variables are assignable");
         }
        .)
   ":="
   Expr<exprType, exprResult>        (. if (sym != nullptr && exprType != nullptr) {
                                            if (!sym->GetType()->IsCompatible(exprType)) {
-                                               SemError(L"Typinkompatibilität bei Zuweisung");
+                                               SemError(L"Type incompatibility in assignment");
                                            }
                                            else {
                                                // Generate assignment: var = exprResult
@@ -281,7 +277,7 @@ Term<Type*& type, Operand &result>(.Type * factorType = nullptr;
     MulOp<op>
     Factor<factorType, factorResult>(. if (type != nullptr && factorType != nullptr) {
                                            if (!type->IsCompatible(factorType)) {
-                                               SemError(L"Typinkompatibilität in Term");
+                                               SemError(L"Type incompatibility in term");
                                            }
                                            else {
                                                // Generate binary operation
@@ -299,7 +295,7 @@ Factor<Type*& type, Operand &result>(.std::wstring name;
         std::string nameStr(name.begin(), name.end());
         Symbol * sym = mSymTab.Find(nameStr);
         if (sym == nullptr) {
-            SemError(L"Identifier nicht deklariert");
+            SemError(L"Identifier not declared");
         }
         else {
             type = sym->GetType();
@@ -322,7 +318,7 @@ Condition<Type * &leftType, Type*& rightType, Operand &leftResult, Operand &righ
   Relop<compareOp>
   Expr<rightType, rightResult>      (. if (leftType != nullptr && rightType != nullptr) {
                                            if (!leftType->IsCompatible(rightType)) {
-                                               SemError(L"Typinkompatibilität in Bedingung");
+                                               SemError(L"Type incompatibility in condition");
                                            }
                                        }
                                     .)

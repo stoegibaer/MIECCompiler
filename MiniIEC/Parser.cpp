@@ -83,10 +83,8 @@ void Parser::MIEC() {
 		
 		if (errors->count == 0) {
 		   try {
-		       // Erstelle Code-Generator
 		       CodeGenerator codeGen(mDACGen);
 		       
-		       // Öffne Output-Dateien
 		       std::string baseName = programName;
 		       std::ofstream iexFile(baseName + ".iex", std::ios::binary);
 		       std::ofstream disFile(baseName + ".dis");
@@ -96,10 +94,8 @@ void Parser::MIEC() {
 		       } else if (!disFile.is_open()) {
 		           std::cerr << "Error: Could not open " << baseName << ".dis for writing" << std::endl;
 		       } else {
-		           // Erzeuge Code
 		           codeGen.GenerateCode(iexFile, disFile);
-		           
-		           // Schließe Dateien
+		
 		           iexFile.close();
 		           disFile.close();
 		           
@@ -109,7 +105,7 @@ void Parser::MIEC() {
 		       }
 		   } catch (const std::exception& e) {
 		       std::cerr << "Code generation error: " << e.what() << std::endl;
-		       errors->count++;  // Count code generation errors!
+		       errors->count++;
 		   }
 		}
 		
@@ -138,7 +134,7 @@ void Parser::VarDeclList() {
 		Expect(10 /* ";" */);
 		int offset = mSymTab.GetCurrentOffset();
 		if (!mSymTab.AddVar(std::string(name.begin(), name.end()), type, offset)) {
-		   SemError(L"Variable bereits deklariert");
+		   SemError(L"Variable is already declared!");
 		}
 		else {
 		   mSymTab.IncreaseOffset(type->GetSize());
@@ -153,7 +149,7 @@ void Parser::VarDeclList() {
 			Expect(10 /* ";" */);
 			offset = mSymTab.GetCurrentOffset();
 			if (!mSymTab.AddVar(std::string(name.begin(), name.end()), type, offset)) {
-			  SemError(L"Variable bereits deklariert");
+			  SemError(L"Variable is already declared!");
 			}
 			else {
 			  mSymTab.IncreaseOffset(type->GetSize());
@@ -183,17 +179,17 @@ void Parser::Assignment() {
 		std::string nameStr(name.begin(), name.end());
 		Symbol * sym = mSymTab.Find(nameStr);
 		if (sym == nullptr) {
-		  SemError(L"Variable nicht deklariert");
+		  SemError(L"Variable is not declared");
 		}
 		else if (dynamic_cast<VarSymbol*>(sym) == nullptr) {
-		  SemError(L"Nur Variablen können zugewiesen werden");
+		  SemError(L"Only variables are assignable");
 		}
 		
 		Expect(11 /* ":=" */);
 		Expr(exprType, exprResult);
 		if (sym != nullptr && exprType != nullptr) {
 		   if (!sym->GetType()->IsCompatible(exprType)) {
-		       SemError(L"Typinkompatibilität bei Zuweisung");
+		       SemError(L"Type incompatibility in assignment");
 		   }
 		   else {
 		       // Generate assignment: var = exprResult
@@ -317,7 +313,7 @@ void Parser::Condition(Type * &leftType, Type*& rightType, Operand &leftResult, 
 		Expr(rightType, rightResult);
 		if (leftType != nullptr && rightType != nullptr) {
 		   if (!leftType->IsCompatible(rightType)) {
-		       SemError(L"Typinkompatibilität in Bedingung");
+		       SemError(L"Type incompatibility in condition");
 		   }
 		}
 		
@@ -335,7 +331,7 @@ void Parser::Term(Type*& type, Operand &result) {
 			Factor(factorType, factorResult);
 			if (type != nullptr && factorType != nullptr) {
 			   if (!type->IsCompatible(factorType)) {
-			       SemError(L"Typinkompatibilität in Term");
+			       SemError(L"Type incompatibility in term");
 			   }
 			   else {
 			       // Generate binary operation
@@ -365,7 +361,7 @@ void Parser::Factor(Type*& type, Operand &result) {
 			std::string nameStr(name.begin(), name.end());
 			Symbol * sym = mSymTab.Find(nameStr);
 			if (sym == nullptr) {
-			  SemError(L"Identifier nicht deklariert");
+			  SemError(L"Identifier not declared");
 			}
 			else {
 			  type = sym->GetType();

@@ -60,7 +60,7 @@ public:
 SymbolTable mSymTab;
     DACGenerator mDACGen;
 
-// Helper method für Fehlermeldungen
+
 void SemError(const wchar_t* msg) {
     errors->Error(la->line, la->col, msg);
 }
